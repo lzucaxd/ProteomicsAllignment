@@ -1,0 +1,35 @@
+# Downloaded PSM data (large)
+pdc_psm/
+
+# Pipeline results (large: TSVs, gene matrices, plots)
+results/
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+*.egg-info/
+.eggs/
+
+# R
+.Rhistory
+.RData
+.Ruserdata
+
+# Logs
+*.log
+pipeline_run.log
+
+# Jupyter
+.ipynb_checkpoints/
+
+# R default plot output
+Rplots.pdf
+
+# OS / IDE
+.DS_Store
+*.swp
+*.swo
+*~
