@@ -21,12 +21,19 @@ __pycache__/
 # Logs
 *.log
 pipeline_run.log
+MSstatsTMT_summarization*.log
 
 # Jupyter
 .ipynb_checkpoints/
 
 # R default plot output
 Rplots.pdf
+
+# CCLE peptide: large inputs and generated outputs
+ccle_peptide/*.xlsx
+ccle_peptide/ccle_protein_quant_with_peptides_*.tsv
+ccle_peptide/ccle_missing_per_*.csv
+ccle_peptide/missing_per_*.png
 
 # OS / IDE
 .DS_Store

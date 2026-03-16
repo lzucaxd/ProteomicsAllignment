@@ -26,12 +26,16 @@
 #   --force_summarize   Re-run proteinSummarization even if protein_summary.tsv exists.
 #   --sample_txt         CPTAC study design: *.sample.txt (FileNameRegEx, AnalyticalSample, channel cols, POOL=bridge). If set, build/audit/rebuild annotation from it.
 #   --replace_annotation When rebuilding from sample.txt, overwrite annotation_filled.csv with corrected annotation.
+#   --msstats_qc_plots   Save MSstatsTMT built-in QC plots to outdir/plots (for lab debugging). Default: TRUE.
+#   --n_profile_proteins Number of proteins for MSstatsTMT ProfilePlot (0 = skip). Default: 0.
+#   --msstats_input_dir  Use pre-built msstats_input.tsv (e.g. from CCLE converter). Skips PSM parse/annotation; CPTAC flow unchanged.
 #
 # Outputs:
 #   parsed_psm_long.tsv   Long-format PSM (one row per PSM x Run x Channel)
 #   msstats_input.tsv     Input passed to proteinSummarization
 #   protein_summary.tsv   Protein-level abundances from MSstatsTMT
 #   gene_matrix.csv       Final sample x gene matrix (Norm channel removed)
+#   plots/                MSstatsTMT QCPlot (and optional ProfilePlots) for lab debugging
 #   qc_summary.txt        QC counts and intensity distributions
 #   annotation_audit.txt   If --sample_txt: audit of current vs sample.txt (plex, channel, bridge, fraction).
 #   annotation_filled_corrected.csv  Corrected annotation from sample.txt (or built when no annotation exists).
@@ -579,7 +583,8 @@ protein_to_gene <- function(protein_ids, species = "Hs") {
   suppressPackageStartupMessages(do.call(library, list(pkg, character.only = TRUE)))
   db <- if (species == "Hs") org.Hs.eg.db else org.Mm.eg.db
 
-  ids <- unique(na.omit(protein_ids))
+  ids_orig <- unique(na.omit(protein_ids))
+  ids <- sub("^##", "", ids_orig)
   # Try with and without version (RefSeq: NP_123.1 → NP_123)
   ids_flat <- unique(c(ids, sub("\\.[0-9]+$", "", ids)))
   # RefSeq (NP_, XP_): try REFSEQ keytype
@@ -587,12 +592,16 @@ protein_to_gene <- function(protein_ids, species = "Hs") {
     AnnotationDbi::select(db, keys = ids_flat, columns = "SYMBOL", keytype = "REFSEQ"),
     error = function(e) data.frame(REFSEQ = character(), SYMBOL = character())
   )
-  # UniProt (e.g. P12345): try UNIPROT keytype if available
+  # UniProt: strip sp|ACC|NAME or tr|ACC|NAME to ACC; strip isoform suffix for org.Hs.eg.db (canonical only)
+  ids_uniprot_raw <- sub("^[a-z]{2}\\|([^|]+)\\|.*$", "\\1", ids_flat, ignore.case = TRUE)
+  ids_uniprot_canonical <- sub("-[0-9]+$", "", ids_uniprot_raw)
+  ids_uniprot <- unique(c(ids_flat, ids_uniprot_raw, ids_uniprot_canonical))
+  ids_uniprot <- ids_uniprot[nzchar(ids_uniprot) & !is.na(ids_uniprot)]
   keytypes <- AnnotationDbi::keytypes(db)
   out_uniprot <- data.frame(UNIPROT = character(), SYMBOL = character())
-  if ("UNIPROT" %in% keytypes) {
+  if ("UNIPROT" %in% keytypes && length(ids_uniprot) > 0L) {
     out_uniprot <- tryCatch(
-      AnnotationDbi::select(db, keys = ids_flat, columns = "SYMBOL", keytype = "UNIPROT"),
+      AnnotationDbi::select(db, keys = ids_uniprot, columns = "SYMBOL", keytype = "UNIPROT"),
       error = function(e) out_uniprot
     )
   }
@@ -615,6 +624,16 @@ protein_to_gene <- function(protein_ids, species = "Hs") {
     for (i in seq_len(nrow(out_uniprot)))
       if (!is.na(out_uniprot$SYMBOL[i]) && nzchar(out_uniprot$SYMBOL[i]))
         symbol_by_id[out_uniprot$UNIPROT[i]] <- out_uniprot$SYMBOL[i]
+  # Map sp|ACC|NAME / tr|ACC|NAME to symbol via extracted accession (try raw and canonical)
+  for (id in ids) {
+    if (nzchar(symbol_by_id[id])) next
+    acc <- sub("^[a-z]{2}\\|([^|]+)\\|.*$", "\\1", id, ignore.case = TRUE)
+    acc_canonical <- sub("-[0-9]+$", "", acc)
+    if (acc != id && acc %in% names(symbol_by_id) && nzchar(symbol_by_id[acc]))
+      symbol_by_id[id] <- symbol_by_id[acc]
+    else if (acc_canonical %in% names(symbol_by_id) && nzchar(symbol_by_id[acc_canonical]))
+      symbol_by_id[id] <- symbol_by_id[acc_canonical]
+  }
   if (nrow(out_alias) > 0L && "SYMBOL" %in% names(out_alias))
     for (i in seq_len(nrow(out_alias)))
       if (!is.na(out_alias$SYMBOL[i]) && nzchar(out_alias$SYMBOL[i])) {
@@ -631,10 +650,10 @@ protein_to_gene <- function(protein_ids, species = "Hs") {
       symbol_by_id[id] <- symbol_by_id[flat]
   }
 
-  # Retain original ID when mapping fails (paper requirement)
+  # Retain original ID when mapping fails (paper requirement); ProteinName keeps ## for contaminants
   data.frame(
-    ProteinName = ids,
-    GeneSymbol = ifelse(nzchar(symbol_by_id[ids]), symbol_by_id[ids], ids),
+    ProteinName = ids_orig,
+    GeneSymbol = ifelse(nzchar(symbol_by_id[ids]), symbol_by_id[ids], ids_orig),
     stringsAsFactors = FALSE
   )
 }
@@ -644,23 +663,42 @@ protein_to_gene <- function(protein_ids, species = "Hs") {
 # ------------------------------------------------------------------------------
 qc_summary <- function(parsed_psm, msstats_input, protein_summary, gene_matrix, outdir, annotation_audit_info = NULL) {
   prot_n <- if ("Protein" %in% names(protein_summary)) uniqueN(protein_summary$Protein) else uniqueN(protein_summary$ProteinName)
-  total_runs <- uniqueN(parsed_psm$Run)
-  total_fractions <- uniqueN(parsed_psm[, .(Run, Fraction)])
-  lines <- c(
-    "=== PDC/CPTAC PSM → MSstatsTMT → Gene Matrix QC ===",
-    paste("Total runs parsed (fraction files):", total_runs),
-    paste("Total fractions (Run x Fraction):", total_fractions),
-    paste("PSM rows (long format):", nrow(parsed_psm)),
-    paste("Peptides retained (unique PeptideSequence_Charge):", uniqueN(msstats_input[, .(PeptideSequence, Charge)])),
-    paste("Proteins summarized:", prot_n),
-    paste("Genes in final matrix:", nrow(gene_matrix)),
-    "",
-    "Intensity (PSM-level, before normalization):",
-    paste("  Min:", min(parsed_psm$Intensity, na.rm = TRUE)),
-    paste("  Max:", max(parsed_psm$Intensity, na.rm = TRUE)),
-    paste("  Median:", median(parsed_psm$Intensity, na.rm = TRUE)),
-    paste("  Mean:", round(mean(parsed_psm$Intensity, na.rm = TRUE), 2))
-  )
+  if (is.null(parsed_psm)) {
+    total_runs <- uniqueN(msstats_input$Run)
+    total_fractions <- NA_integer_
+    lines <- c(
+      "=== MSstatsTMT → Gene Matrix QC (pre-built input, e.g. CCLE) ===",
+      paste("Total runs:", total_runs),
+      paste("Input rows (peptide-level):", nrow(msstats_input)),
+      paste("Peptides retained (unique PeptideSequence_Charge):", uniqueN(msstats_input[, .(PeptideSequence, Charge)])),
+      paste("Proteins summarized:", prot_n),
+      paste("Genes in final matrix:", nrow(gene_matrix)),
+      "",
+      "Intensity (peptide-level input):",
+      paste("  Min:", min(msstats_input$Intensity, na.rm = TRUE)),
+      paste("  Max:", max(msstats_input$Intensity, na.rm = TRUE)),
+      paste("  Median:", median(msstats_input$Intensity, na.rm = TRUE)),
+      paste("  Mean:", round(mean(msstats_input$Intensity, na.rm = TRUE), 2))
+    )
+  } else {
+    total_runs <- uniqueN(parsed_psm$Run)
+    total_fractions <- uniqueN(parsed_psm[, .(Run, Fraction)])
+    lines <- c(
+      "=== PDC/CPTAC PSM → MSstatsTMT → Gene Matrix QC ===",
+      paste("Total runs parsed (fraction files):", total_runs),
+      paste("Total fractions (Run x Fraction):", total_fractions),
+      paste("PSM rows (long format):", nrow(parsed_psm)),
+      paste("Peptides retained (unique PeptideSequence_Charge):", uniqueN(msstats_input[, .(PeptideSequence, Charge)])),
+      paste("Proteins summarized:", prot_n),
+      paste("Genes in final matrix:", nrow(gene_matrix)),
+      "",
+      "Intensity (PSM-level, before normalization):",
+      paste("  Min:", min(parsed_psm$Intensity, na.rm = TRUE)),
+      paste("  Max:", max(parsed_psm$Intensity, na.rm = TRUE)),
+      paste("  Median:", median(parsed_psm$Intensity, na.rm = TRUE)),
+      paste("  Mean:", round(mean(parsed_psm$Intensity, na.rm = TRUE), 2))
+    )
+  }
   if ("Abundance" %in% names(protein_summary)) {
     lines <- c(lines,
       "",
@@ -708,6 +746,10 @@ main <- function() {
   force_summarize <- FALSE
   sample_txt_path <- NULL
   replace_annotation <- FALSE
+  msstats_qc_plots <- TRUE
+  n_profile_proteins <- 0L
+  msstats_input_dir <- NULL
+  memory_aware <- FALSE
 
   i <- 1
   while (i <= length(args)) {
@@ -722,13 +764,182 @@ main <- function() {
     else if (args[i] == "--force_summarize") { force_summarize <- TRUE; i <- i + 1 }
     else if (args[i] == "--sample_txt" && i < length(args)) { sample_txt_path <- args[i + 1]; i <- i + 2 }
     else if (args[i] == "--replace_annotation") { replace_annotation <- TRUE; i <- i + 1 }
+    else if (args[i] == "--msstats_qc_plots" && i < length(args)) { msstats_qc_plots <- as.logical(args[i + 1]); i <- i + 2 }
+    else if (args[i] == "--n_profile_proteins" && i < length(args)) { n_profile_proteins <- as.integer(args[i + 1]); i <- i + 2 }
+    else if (args[i] == "--msstats_input_dir" && i < length(args)) { msstats_input_dir <- args[i + 1]; i <- i + 2 }
+    else if (args[i] == "--memory_aware") { memory_aware <- TRUE; i <- i + 1 }
     else i <- i + 1
+  }
+
+  dir.create(outdir, recursive = TRUE, showWarnings = FALSE)
+
+  # Branch: pre-built MSstats input (e.g. CCLE) — skip PSM parse and annotation
+  if (!is.null(msstats_input_dir)) {
+    if (!dir.exists(msstats_input_dir))
+      stop("--msstats_input_dir not found: ", msstats_input_dir)
+    input_path <- file.path(msstats_input_dir, "msstats_input.tsv")
+    if (!file.exists(input_path)) stop("Not found: ", input_path)
+    message("Loading pre-built MSstatsTMT input (e.g. CCLE): ", input_path, if (memory_aware) " [memory-aware: nThread=1]" else "")
+    input_dt <- fread(input_path, sep = "\t", header = TRUE, na.strings = c("", "NA"), nThread = if (memory_aware) 1L else getDTthreads())
+    setDT(input_dt)
+    if (!is.null(max_runs) && max_runs > 0L) {
+      runs_keep <- unique(input_dt$Run)[seq_len(min(max_runs, uniqueN(input_dt$Run)))]
+      input_dt <- input_dt[Run %in% runs_keep]
+      message("Subsampled to ", length(runs_keep), " runs (--max_runs ", max_runs, ")")
+    }
+    input_dt <- remove_shared_peptides(input_dt)
+    input_dt <- input_dt[!is.na(Intensity) & Intensity > 0]
+    if (nrow(input_dt) == 0L) stop("No rows after loading and filtering.")
+    if (memory_aware) gc(verbose = FALSE)
+    # Aggregate to peptide level (one row per peptide x Run x Channel) — same as CPTAC path; MSstatsTMT expects unique (Run, Channel, Feature)
+    input_dt <- input_dt[, .(
+      Intensity = as.double(median(Intensity, na.rm = TRUE)),
+      PSM = PSM[1L]
+    ), by = c("ProteinName", "PeptideSequence", "Charge", "Mixture", "TechRepMixture", "Run", "Channel", "Condition", "BioReplicate")]
+    if ("Fraction" %in% names(input_dt)) input_dt[, Fraction := NULL]
+    if (memory_aware) gc(verbose = FALSE)
+    has_norm <- any(tolower(input_dt$Condition) == "norm")
+    if (!has_norm) warning("No channel with Condition = 'Norm'. reference_norm will be FALSE.")
+    msstats_path <- file.path(outdir, "msstats_input.tsv")
+    fwrite(input_dt, msstats_path, sep = "\t")
+    message("Saved ", nrow(input_dt), " rows to ", msstats_path)
+    prot_path <- file.path(outdir, "protein_summary.tsv")
+    if (!force_summarize && file.exists(prot_path)) {
+      message("Loading protein summary from checkpoint: ", prot_path)
+      quant <- fread(prot_path, sep = "\t", header = TRUE)
+      setDT(quant)
+    } else {
+      message("Running MSstatsTMT proteinSummarization...")
+      quant_result <- proteinSummarization(
+        input_dt,
+        method = "msstats",
+        global_norm = TRUE,
+        reference_norm = has_norm,
+        remove_norm_channel = TRUE,
+        remove_empty_channel = TRUE,
+        MBimpute = MBimpute
+      )
+      # MSstatsTMT 2.x: proteinSummarization returns list(FeatureLevelData, ProteinLevelData); extract protein table
+      if (is.list(quant_result) && "ProteinLevelData" %in% names(quant_result)) {
+        quant <- as.data.table(quant_result$ProteinLevelData)
+      } else if (is.list(quant_result) && !inherits(quant_result, "data.frame")) {
+        quant <- rbindlist(lapply(quant_result, as.data.table), use.names = TRUE, fill = TRUE)
+      } else {
+        quant <- as.data.table(quant_result)
+      }
+      if (nrow(quant) == 0L) stop("proteinSummarization returned no rows.")
+      fwrite(quant, prot_path, sep = "\t")
+      message("Saved protein summary to ", prot_path)
+      # QC plots: use full summarization result (list) and readable size/fonts
+      if (msstats_qc_plots && is.list(quant_result) && "ProteinLevelData" %in% names(quant_result)) {
+        plots_dir <- file.path(outdir, "plots")
+        dir.create(plots_dir, recursive = TRUE, showWarnings = FALSE)
+        plot_prefix <- paste0(plots_dir, .Platform$file.sep)
+        message("Generating MSstatsTMT QC plots (readable) in ", plots_dir, " ...")
+        qc_ok <- tryCatch({
+          # MSstatsTMT plotting can fail if Protein is numeric index; map back to ProteinName IDs
+          qr_plot <- quant_result
+          tryCatch({
+            if ("ProteinLevelData" %in% names(qr_plot) && "FeatureLevelData" %in% names(qr_plot)) {
+              pl <- as.data.table(qr_plot$ProteinLevelData)
+              fl <- as.data.table(qr_plot$FeatureLevelData)
+              # Collapse high-cardinality Conditions for CCLE QCPlot (many cell lines break MSstatsTMT plotting)
+              if ("Condition" %in% names(pl)) pl[, Condition := fifelse(tolower(Condition) == "norm", "Norm", "Sample")]
+              if ("Condition" %in% names(fl)) fl[, Condition := fifelse(tolower(Condition) == "norm", "Norm", "Sample")]
+              if ("Protein" %in% names(pl) && is.numeric(pl$Protein) && "ProteinName" %in% names(input_dt)) {
+                u_in <- unique(input_dt$ProteinName)
+                u_q <- sort(unique(pl$Protein))
+                if (length(u_q) == length(u_in)) {
+                  num_to_name <- setNames(u_in, u_q)
+                  pl[, Protein := num_to_name[as.character(Protein)]]
+                  if ("Protein" %in% names(fl) && is.numeric(fl$Protein))
+                    fl[, Protein := num_to_name[as.character(Protein)]]
+                  qr_plot$ProteinLevelData <- pl
+                  qr_plot$FeatureLevelData <- fl
+                }
+              }
+              if ("Protein" %in% names(pl)) pl[, Protein := as.character(Protein)]
+              if ("Protein" %in% names(fl)) fl[, Protein := as.character(Protein)]
+              qr_plot$ProteinLevelData <- pl
+              qr_plot$FeatureLevelData <- fl
+            }
+          }, error = function(e) NULL)
+          dataProcessPlotsTMT(
+            data = qr_plot,
+            type = "QCPlot",
+            which.Protein = "allonly",
+            width = 20,
+            height = 12,
+            x.axis.size = 12,
+            y.axis.size = 12,
+            text.size = 4,
+            legend.size = 9,
+            address = plot_prefix
+          )
+          message("  QCPlot saved.")
+          TRUE
+        }, error = function(e) { warning("MSstatsTMT QC plots failed: ", conditionMessage(e)); FALSE })
+        # Fallback: simple QC plots as PNG (always run so we have at least one usable plot)
+        tryCatch({
+          q <- as.data.table(quant_result$ProteinLevelData)
+          if (nrow(q) > 0L && "Abundance" %in% names(q)) {
+            run_col <- if ("Run" %in% names(q)) "Run" else NULL
+            png(file.path(plots_dir, "qc_abundance_boxplot.png"), width = 1200, height = 600, res = 100)
+            par(mar = c(8, 4, 2, 1))
+            if (length(run_col) && uniqueN(q[[run_col]]) <= 100L)
+              boxplot(Abundance ~ get(run_col), data = q, las = 2, main = "Protein abundance by run", ylab = "Abundance")
+            else
+              hist(q$Abundance, breaks = 80, main = "Protein abundance distribution", xlab = "Abundance", col = "steelblue")
+            dev.off()
+            png(file.path(plots_dir, "qc_abundance_hist.png"), width = 600, height = 500, res = 100)
+            hist(q$Abundance, breaks = 80, main = "Protein abundance distribution", xlab = "Abundance", col = "steelblue")
+            dev.off()
+            message("  Fallback QC PNGs saved: qc_abundance_boxplot.png, qc_abundance_hist.png")
+          }
+        }, error = function(e) warning("Fallback QC PNGs failed: ", conditionMessage(e)))
+      } else if (msstats_qc_plots) {
+        warning("MSstatsTMT QC plots skipped (summarization result not in expected list format).")
+      }
+    }
+    prot_col <- if ("Protein" %in% names(quant)) "Protein" else "ProteinName"
+    # MSstatsTMT ProteinLevelData often has numeric Protein index; map back to ProteinName from input for gene mapping
+    if (all(is.numeric(quant[[prot_col]])) && "ProteinName" %in% names(input_dt)) {
+      u_in <- unique(input_dt$ProteinName)
+      u_q <- sort(unique(quant[[prot_col]]))
+      if (length(u_q) == length(u_in)) {
+        num_to_name <- setNames(u_in, u_q)
+        quant[, ProteinName_use := num_to_name[as.character(get(prot_col))]]
+        prot_col <- "ProteinName_use"
+      }
+    }
+    gene_map <- protein_to_gene(unique(quant[[prot_col]]), species)
+    setnames(gene_map, "ProteinName", prot_col)
+    quant <- merge(quant, gene_map, by = prot_col, all.x = TRUE)
+    quant[, GeneSymbol := fifelse(is.na(GeneSymbol) | GeneSymbol == "", as.character(get(prot_col)), as.character(GeneSymbol))]
+    quant_norm_removed <- quant[tolower(Condition) != "norm"]
+    quant_norm_removed <- quant_norm_removed[!is.na(Abundance) & nzchar(as.character(Abundance))]
+    sample_id <- quant_norm_removed$BioReplicate
+    mat_dt <- quant_norm_removed[, .(sample = sample_id, GeneSymbol, Abundance)]
+    mat_wide <- dcast(mat_dt, GeneSymbol ~ sample, value.var = "Abundance", fun.aggregate = median, na.rm = TRUE)
+    # Drop genes with no observed values across all samples
+    value_cols <- names(mat_wide)[!names(mat_wide) %in% c("GeneSymbol")]
+    row_has_data <- rowSums(!is.na(mat_wide[, value_cols, with = FALSE])) > 0
+    mat_wide <- mat_wide[row_has_data]
+    # One UniProt ID per gene (first occurrence); protein col is typically UniProt accession
+    gene_uniprot <- unique(quant_norm_removed[, .(UniProtID = get(prot_col)[1]), by = GeneSymbol])
+    mat_wide <- merge(mat_wide, gene_uniprot, by = "GeneSymbol", all.x = TRUE, sort = FALSE)
+    setcolorder(mat_wide, c("GeneSymbol", "UniProtID", setdiff(names(mat_wide), c("GeneSymbol", "UniProtID"))))
+    mat <- as.matrix(mat_wide[, -c(1, 2), with = FALSE])
+    rownames(mat) <- mat_wide$GeneSymbol
+    gene_path <- file.path(outdir, "gene_matrix.csv")
+    fwrite(data.table(GeneSymbol = mat_wide$GeneSymbol, UniProtID = mat_wide$UniProtID, mat), gene_path)
+    message("Saved gene matrix (", nrow(mat), " x ", ncol(mat), ") to ", gene_path, " [GeneSymbol + UniProtID]")
+    qc_summary(NULL, input_dt, quant, data.table(GeneSymbol = rownames(mat)), outdir, NULL)
+    return(invisible(NULL))
   }
 
   if (is.null(psm_dir) || !dir.exists(psm_dir))
     stop("--psm_dir must point to a directory containing .psm files.")
-
-  dir.create(outdir, recursive = TRUE, showWarnings = FALSE)
 
   parsed_path <- file.path(outdir, "parsed_psm_long.tsv")
 
@@ -861,7 +1072,7 @@ main <- function() {
     setDT(quant)
   } else {
     message("Running MSstatsTMT proteinSummarization...")
-    quant <- proteinSummarization(
+    quant_result <- proteinSummarization(
       input_dt,
       method = "msstats",
       global_norm = TRUE,
@@ -870,14 +1081,108 @@ main <- function() {
       remove_empty_channel = TRUE,
       MBimpute = MBimpute
     )
-    if (is.list(quant) && !inherits(quant, "data.frame")) {
-      quant <- rbindlist(lapply(quant, as.data.table), use.names = TRUE, fill = TRUE)
+    if (is.list(quant_result) && "ProteinLevelData" %in% names(quant_result)) {
+      quant <- as.data.table(quant_result$ProteinLevelData)
+    } else if (is.list(quant_result) && !inherits(quant_result, "data.frame")) {
+      quant <- rbindlist(lapply(quant_result, as.data.table), use.names = TRUE, fill = TRUE)
     } else {
-      quant <- as.data.table(quant)
+      quant <- as.data.table(quant_result)
     }
     if (nrow(quant) == 0L) stop("proteinSummarization returned no rows.")
     fwrite(quant, prot_path, sep = "\t")
     message("Saved protein summary to ", prot_path)
+  }
+
+  # Step 4b: MSstatsTMT built-in QC plots (readable: larger size and fonts); needs quant_result from summarization
+  if (msstats_qc_plots && exists("quant_result") && is.list(quant_result) && "ProteinLevelData" %in% names(quant_result)) {
+    plots_dir <- file.path(outdir, "plots")
+    dir.create(plots_dir, recursive = TRUE, showWarnings = FALSE)
+    plot_prefix <- paste0(plots_dir, .Platform$file.sep)
+    message("Generating MSstatsTMT QC plots (readable) in ", plots_dir, " ...")
+    tryCatch({
+      # MSstatsTMT plotting can fail if Protein is numeric index; map back to ProteinName IDs
+      qr_plot <- quant_result
+      tryCatch({
+        if ("ProteinLevelData" %in% names(qr_plot) && "FeatureLevelData" %in% names(qr_plot)) {
+          pl <- as.data.table(qr_plot$ProteinLevelData)
+          fl <- as.data.table(qr_plot$FeatureLevelData)
+          # Collapse high-cardinality Conditions for CCLE QCPlot (many cell lines break MSstatsTMT plotting)
+          if ("Condition" %in% names(pl)) pl[, Condition := fifelse(tolower(Condition) == "norm", "Norm", "Sample")]
+          if ("Condition" %in% names(fl)) fl[, Condition := fifelse(tolower(Condition) == "norm", "Norm", "Sample")]
+          if ("Protein" %in% names(pl) && is.numeric(pl$Protein) && exists("input_dt") && "ProteinName" %in% names(input_dt)) {
+            u_in <- unique(input_dt$ProteinName)
+            u_q <- sort(unique(pl$Protein))
+            if (length(u_q) == length(u_in)) {
+              num_to_name <- setNames(u_in, u_q)
+              pl[, Protein := num_to_name[as.character(Protein)]]
+              if ("Protein" %in% names(fl) && is.numeric(fl$Protein))
+                fl[, Protein := num_to_name[as.character(Protein)]]
+              qr_plot$ProteinLevelData <- pl
+              qr_plot$FeatureLevelData <- fl
+            }
+          }
+          if ("Protein" %in% names(pl)) pl[, Protein := as.character(Protein)]
+          if ("Protein" %in% names(fl)) fl[, Protein := as.character(Protein)]
+          qr_plot$ProteinLevelData <- pl
+          qr_plot$FeatureLevelData <- fl
+        }
+      }, error = function(e) NULL)
+      dataProcessPlotsTMT(
+        data = qr_plot,
+        type = "QCPlot",
+        which.Protein = "allonly",
+        width = 20,
+        height = 12,
+        x.axis.size = 12,
+        y.axis.size = 12,
+        text.size = 4,
+        legend.size = 9,
+        address = plot_prefix
+      )
+      message("  QCPlot saved.")
+      if (n_profile_proteins > 0L) {
+        prots <- unique(quant[[if ("Protein" %in% names(quant)) "Protein" else "ProteinName"]])
+        prots <- head(prots[!is.na(prots) & nzchar(prots)], n_profile_proteins)
+        if (length(prots) > 0L) {
+          dataProcessPlotsTMT(
+            data = quant_result,
+            type = "ProfilePlot",
+            which.Protein = prots,
+            width = 20,
+            height = 12,
+            x.axis.size = 12,
+            y.axis.size = 12,
+            text.size = 4,
+            address = plot_prefix
+          )
+          message("  ProfilePlots saved for ", length(prots), " proteins.")
+        }
+      }
+    }, error = function(e) {
+      warning("MSstatsTMT QC plots failed: ", conditionMessage(e))
+    })
+    # Fallback simple QC PNGs (always run so we have at least one usable plot)
+    tryCatch({
+      if (exists("quant_result") && is.list(quant_result) && "ProteinLevelData" %in% names(quant_result)) {
+        q <- as.data.table(quant_result$ProteinLevelData)
+        if (nrow(q) > 0L && "Abundance" %in% names(q)) {
+          run_col <- if ("Run" %in% names(q)) "Run" else NULL
+          png(file.path(plots_dir, "qc_abundance_boxplot.png"), width = 1200, height = 600, res = 100)
+          par(mar = c(8, 4, 2, 1))
+          if (length(run_col) && uniqueN(q[[run_col]]) <= 100L)
+            boxplot(Abundance ~ get(run_col), data = q, las = 2, main = "Protein abundance by run", ylab = "Abundance")
+          else
+            hist(q$Abundance, breaks = 80, main = "Protein abundance distribution", xlab = "Abundance", col = "steelblue")
+          dev.off()
+          png(file.path(plots_dir, "qc_abundance_hist.png"), width = 600, height = 500, res = 100)
+          hist(q$Abundance, breaks = 80, main = "Protein abundance distribution", xlab = "Abundance", col = "steelblue")
+          dev.off()
+          message("  Fallback QC PNGs saved: qc_abundance_boxplot.png, qc_abundance_hist.png")
+        }
+      }
+    }, error = function(e) warning("Fallback QC PNGs failed: ", conditionMessage(e)))
+  } else if (msstats_qc_plots && (!exists("quant_result") || !is.list(quant_result))) {
+    message("MSstatsTMT QC plots skipped (protein summary loaded from file; re-run with --force_summarize to regenerate plots).")
   }
 
   # Step 5: Map protein → gene symbol
@@ -891,15 +1196,24 @@ main <- function() {
 
   # Step 6: Build sample × gene matrix (BioReplicate = sample; exclude Norm channel)
   quant_norm_removed <- quant[tolower(Condition) != "norm"]
+  quant_norm_removed <- quant_norm_removed[!is.na(Abundance) & nzchar(as.character(Abundance))]
   sample_id <- quant_norm_removed$BioReplicate
   mat_dt <- quant_norm_removed[, .(sample = sample_id, GeneSymbol, Abundance)]
   mat_wide <- dcast(mat_dt, GeneSymbol ~ sample, value.var = "Abundance", fun.aggregate = median, na.rm = TRUE)
-  mat <- as.matrix(mat_wide[, -1, with = FALSE])
+  # Drop genes with no observed values across all samples
+  value_cols <- names(mat_wide)[!names(mat_wide) %in% c("GeneSymbol")]
+  row_has_data <- rowSums(!is.na(mat_wide[, value_cols, with = FALSE])) > 0
+  mat_wide <- mat_wide[row_has_data]
+  # One UniProt ID per gene (first occurrence); protein col is typically UniProt accession
+  gene_uniprot <- unique(quant_norm_removed[, .(UniProtID = get(prot_col)[1]), by = GeneSymbol])
+  mat_wide <- merge(mat_wide, gene_uniprot, by = "GeneSymbol", all.x = TRUE, sort = FALSE)
+  setcolorder(mat_wide, c("GeneSymbol", "UniProtID", setdiff(names(mat_wide), c("GeneSymbol", "UniProtID"))))
+  mat <- as.matrix(mat_wide[, -c(1, 2), with = FALSE])
   rownames(mat) <- mat_wide$GeneSymbol
 
   gene_path <- file.path(outdir, "gene_matrix.csv")
-  fwrite(data.table(GeneSymbol = rownames(mat), mat), gene_path)
-  message("Saved gene matrix (", nrow(mat), " x ", ncol(mat), ") to ", gene_path)
+  fwrite(data.table(GeneSymbol = mat_wide$GeneSymbol, UniProtID = mat_wide$UniProtID, mat), gene_path)
+  message("Saved gene matrix (", nrow(mat), " x ", ncol(mat), ") to ", gene_path, " [GeneSymbol + UniProtID]")
 
   # Step 7: QC (use full quant for abundance distribution; gene count from matrix)
   qc_summary(parsed_psm, input_dt, quant, data.table(GeneSymbol = rownames(mat)), outdir, annotation_audit_info)

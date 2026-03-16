@@ -1,0 +1,21 @@
+# R dependencies for the ProteomicsAllignment pipeline
+# Install once with: Rscript install_r_packages.R
+# Requires R >= 4.0 (Bioconductor 3.12+).
+#
+# CRAN:
+#   data.table   - PSM parsing and tabular data
+#   ggplot2      - QC plots (msstatsTMT_qc_plots.R)
+#   tidyr        - QC plots
+#
+# Bioconductor:
+#   MSstatsTMT   - TMT normalization and protein summarization
+#   org.Hs.eg.db - Human gene symbol mapping (default)
+#   org.Mm.eg.db - Mouse gene symbol mapping (use --species Mm)
+#
+# Optional (only if you use mouse): org.Mm.eg.db
+
+data.table
+ggplot2
+tidyr
+MSstatsTMT
+org.Hs.eg.db

@@ -2,6 +2,13 @@
 
 End-to-end documentation for going from PDC file manifests to sample × gene matrices and QC plots.
 
+The pipeline supports **arbitrary TMT plex sizes** (TMT6, TMT10, TMT11, TMT16/TMTpro, TMT18) for **both** CPTAC and CCLE (or other pre-built input):
+
+- **CPTAC path**: TMT channel columns in PSM files are auto-detected from the header (e.g. `TMT10-126`, `TMT11-131C`); `*.sample.txt` channel columns are detected by pattern (e.g. `126`, `127N`, `131C`, `134N`). No hardcoded channel list.
+- **CCLE / pre-built path**: Reporter-ion columns in the peptide TSV are auto-detected (`rq_*_sn`); sample table channels are normalized to the same canonical labels.
+
+The annotation schema is fixed (Run, Channel, Condition, BioReplicate, Mixture, TechRepMixture); **exactly one bridge (Condition = Norm) per mixture** is required.
+
 ---
 
 ## Purpose of this pipeline
@@ -124,11 +131,11 @@ Each study gets its **own** outputs under `results/{study_id}/` and its **own** 
 │       ├── protein_summary.tsv
 │       ├── gene_matrix.csv
 │       ├── qc_summary.txt
-│       └── plots/                     # If QC script run
+│       └── plots/                     # MSstatsTMT QCPlot (and optional ProfilePlots) for lab debugging
 ├── run_pipeline_per_manifest.sh        # Main runner: download + R per manifest
 ├── pdc_manifest_downloader.py          # Download files from manifest
 ├── pdc_psm_to_msstatsTMT_protein_matrix.R   # PSM → gene matrix (MSstatsTMT)
-├── msstatsTMT_qc_plots.R               # QC and profile plots
+├── msstatsTMT_qc_plots.R               # Standalone: MSstatsTMT built-in QC/Profile plots only
 ├── check_manifests.py                  # List studies, find duplicate manifests
 └── check_studies_sample_file.py        # Check studies have entry in sample_files_msstats_tmt.csv
 ```
@@ -141,7 +148,7 @@ Each study gets its **own** outputs under `results/{study_id}/` and its **own** 
 - **R** with:
   - `MSstatsTMT` (BiocManager)
   - `org.Hs.eg.db` (human) or `org.Mm.eg.db` (mouse) for gene mapping
-  - `data.table`, `ggplot2`, `tidyr` (for QC script)
+  - `data.table` (for optional standalone QC script)
 
 ---
 
@@ -194,7 +201,7 @@ To avoid filling your disk, run with **cleanup after each study**. Peak usage st
 ./run_pipeline_per_manifest.sh --cleanup-after --delete-psm
 ```
 
-With `--cleanup-after`, once a study's `gene_matrix.csv` is written, the script deletes `parsed_psm_long.tsv` and `msstats_input.tsv` for that study. With `--delete-psm` it also removes `pdc_psm/{study_id}/`. You keep `gene_matrix.csv`, annotation, `protein_summary.tsv`, and QC files. Re-running a study later requires re-downloading and re-running the R pipeline if you used `--delete-psm`. **Note:** The QC plot script needs `msstats_input.tsv` and `protein_summary.tsv`; run it before using `--cleanup-after`, or run the pipeline without `--cleanup-after` for studies where you want QC plots, then clean up manually afterward.
+With `--cleanup-after`, once a study's `gene_matrix.csv` is written, the script deletes `parsed_psm_long.tsv` and `msstats_input.tsv` for that study. With `--delete-psm` it also removes `pdc_psm/{study_id}/`. You keep `gene_matrix.csv`, annotation, `protein_summary.tsv`, and QC files. Re-running a study later requires re-downloading and re-running the R pipeline if you used `--delete-psm`. **Note:** MSstatsTMT QC plots are written to `results/{study_id}/plots/` during the pipeline. The standalone `msstatsTMT_qc_plots.R` needs `msstats_input.tsv` and `protein_summary.tsv`; run it before using `--cleanup-after` if you want to regenerate those plots later.
 
 ### Option B: Single study (manual)
 
@@ -215,15 +222,28 @@ Rscript --no-init-file pdc_psm_to_msstatsTMT_protein_matrix.R \
 
 Without `--sample_txt`, the R script uses existing annotation in `outdir` (e.g. `annotation_filled.csv`) or writes a template and exits; with `--sample_txt` it builds or corrects annotation from the CPTAC sample file.
 
-### Option C: QC plots (after pipeline)
+### Option C: MSstatsTMT QC plots (for lab debugging)
 
-Run per study using that study’s `results` directory (must contain `msstats_input.tsv` and `protein_summary.tsv`):
+The pipeline saves **MSstatsTMT’s built-in QC plot** (box plots of log intensities across channels and MS runs) to `results/{study_id}/plots/` by default. To disable: `--msstats_qc_plots FALSE`. To also save ProfilePlots for a few proteins: `--n_profile_proteins 5`.
+
+To regenerate only MSstatsTMT’s native plots after the pipeline (no custom plots):
 
 ```bash
-Rscript --no-init-file msstatsTMT_qc_plots.R --outdir results/PDC000120 --n_proteins 5
+Rscript --no-init-file msstatsTMT_qc_plots.R --outdir results/PDC000120
+Rscript --no-init-file msstatsTMT_qc_plots.R --outdir results/PDC000120 --n_profile_proteins 5
 ```
 
-Outputs go to `results/{study_id}/plots/` (boxplots, density, PCA, missing heatmap, profile plots).
+Outputs go to `results/{study_id}/plots/` (QCplot.pdf and optionally ProfilePlot per protein).
+
+### Option D: CCLE (or other pre-built MSstats input)
+
+For **CCLE** peptide-level TSV + sample table (Sheet2), use the converter in `data/ccle_peptide/` to produce `msstats_input.tsv` and `annotation_filled.csv`, then run the **same** R pipeline with `--msstats_input_dir`. CPTAC flow is unchanged (no `--msstats_input_dir` = normal PSM + annotation).
+
+1. Export sample sheet: `python3 ccle_peptide/export_sample_sheet2_csv.py`
+2. Convert: `python3 ccle_peptide/ccle_to_msstats_input.py --tsv ... --sample_csv ccle_peptide/sample_info_ccle.csv --outdir results/CCLE`
+3. Run R: `Rscript --no-init-file pdc_psm_to_msstatsTMT_protein_matrix.R --msstats_input_dir results/CCLE --outdir results/CCLE`
+
+See **data/ccle_peptide/README_CCLE.md** for details.
 
 ---
 
@@ -231,7 +251,8 @@ Outputs go to `results/{study_id}/plots/` (boxplots, density, PCA, missing heatm
 
 | Argument | Description |
 |----------|-------------|
-| `--psm_dir` | Directory of `.psm` files (e.g. `pdc_psm/PDC000120`). Required. |
+| `--psm_dir` | Directory of `.psm` files (e.g. `pdc_psm/PDC000120`). Required unless `--msstats_input_dir` is set. |
+| `--msstats_input_dir` | Use pre-built `msstats_input.tsv` (e.g. from CCLE converter). Skips PSM parse and annotation. |
 | `--outdir` | Output directory (e.g. `results/PDC000120`). All outputs and **per-study annotation** go here. |
 | `--sample_txt` | Path to CPTAC `*.sample.txt`. If set, annotation is built/audited/rebuilt from it. |
 | `--annotation` | Path to existing annotation CSV (Run, Channel, Condition, BioReplicate, Mixture, Fraction, TechRepMixture). |
@@ -256,7 +277,7 @@ Outputs go to `results/{study_id}/plots/` (boxplots, density, PCA, missing heatm
 | **protein_summary.tsv** | Protein-level abundances from MSstatsTMT. |
 | **gene_matrix.csv** | Sample × gene (gene symbols), Norm channel removed. |
 | **qc_summary.txt** | Counts and intensity summary. |
-| **plots/** | QC and profile PDFs if `msstatsTMT_qc_plots.R` was run. |
+| **plots/** | MSstatsTMT QCPlot (and optional ProfilePlots) for lab debugging. |
 
 So **each study has its own unique annotation files** in its own `results/{study_id}/` folder.
 
@@ -348,7 +369,7 @@ Exit 0 if that study has an entry in the CSV, else 1.
 2. Put them in `manifests/` and **remove duplicates** (keep one manifest per study); use `check_manifests.py` to see studies and duplicates.
 3. Ensure **every study** has a row in `sample_files_msstats_tmt.csv` with the correct path to its `.sample.txt`; use `check_studies_sample_file.py`.
 4. Run **`./run_pipeline_per_manifest.sh`** to download and process each manifest.
-5. Optionally run **`msstatsTMT_qc_plots.R`** per study for QC and profile plots.
+5. QC plots: the pipeline writes MSstatsTMT’s built-in QC plot to `results/{study_id}/plots/`. Optionally run **`msstatsTMT_qc_plots.R`** to regenerate those plots only.
 
 To use **sample.txt-driven annotation** for each study, extend the runner to read `sample_files_msstats_tmt.csv`, look up `path` for the current `study_id`, and pass `--sample_txt "$path"` to the R script. Until then, the R pipeline uses whatever annotation already exists in `results/{study_id}/` or a template/reference_channel fallback.
 
