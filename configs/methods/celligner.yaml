@@ -1,0 +1,29 @@
+# Method: Celligner-aligned representation
+
+method_name: celligner
+display_name: Celligner
+description: >
+  Nonlinear / global alignment using Contrastive PCA (cPCA) and Mutual
+  Nearest Neighbors (MNN) via the Celligner Python port. Produces a
+  z-scored, aligned representation. Gene set is typically reduced.
+
+feature_level: gene
+transforms_values: true
+value_scale: z_scored
+
+parameters:
+  min_obs_frac: 0.70
+  min_sd: 0.01
+  impute: true
+  impute_strategy: within_domain_gene_median
+  zscore: true
+  compute_umap: true
+
+python_script: scripts/benchmark/run_celligner_all_data.py
+r_wrapper: scripts/methods/run_celligner_representation.R
+python_wrapper: scripts/methods/run_celligner_representation.py
+celligner_repo: models/celligner-master
+
+conda_env: celligner_bench
+
+output_dir: reports/benchmark_master/celligner_all

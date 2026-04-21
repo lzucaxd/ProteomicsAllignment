@@ -1,0 +1,33 @@
+# Method: Bridge-aware per-protein harmonization baseline
+
+method_name: bridge_aware
+display_name: Bridge-Aware
+description: >
+  Conservative per-protein calibration using bridge/reference channel
+  intensities from TMT experiments to align CPTAC and CCLE. Supports
+  shift-only and shift+scale modes.
+
+feature_level: gene
+transforms_values: true
+
+modes:
+  - shift_only
+  - shift_and_scale
+
+parameters:
+  center_estimator: median
+  scale_estimator: mad
+  min_bridge_obs: 3
+  min_bridge_mad: 0.01
+  max_offset_deviation: 10.0
+  reference_domain: cptac
+
+bridge_extraction:
+  r_script: scripts/benchmark/extract_bridge_summaries.R
+  cptac_msstats: data/results/PDC000120/msstats_input.tsv
+  ccle_msstats: data/results/CCLE_corrected/msstats_input.tsv
+
+correction:
+  r_script: scripts/benchmark/bridge_aware_correction.R
+
+output_dir: reports/benchmark_master/methods/bridge_aware

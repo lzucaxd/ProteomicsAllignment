@@ -11,11 +11,11 @@ message("Checking / installing BiocManager ...")
 if (!requireNamespace("BiocManager", quietly = TRUE))
   install.packages("BiocManager", repos = repos_cran)
 
-message("Installing CRAN packages: data.table, ggplot2, tidyr ...")
-install.packages(c("data.table", "ggplot2", "tidyr"), repos = repos_cran)
+message("Installing CRAN packages: data.table, ggplot2, tidyr, cowplot ...")
+install.packages(c("data.table", "ggplot2", "tidyr", "cowplot"), repos = repos_cran)
 
-message("Installing Bioconductor packages: MSstatsTMT, org.Hs.eg.db ...")
-BiocManager::install(c("MSstatsTMT", "org.Hs.eg.db"), update = FALSE, ask = FALSE)
+message("Installing Bioconductor packages: limma, MSstatsTMT, org.Hs.eg.db ...")
+BiocManager::install(c("limma", "MSstatsTMT", "org.Hs.eg.db"), update = FALSE, ask = FALSE)
 
 message("Optional (mouse only): org.Mm.eg.db. Uncomment next line if you need mouse gene mapping.")
 # BiocManager::install("org.Mm.eg.db", update = FALSE, ask = FALSE)

@@ -1,18 +1,58 @@
 # OS
 .DS_Store
+Thumbs.db
 
 # Python
 .venv/
+.venv-diagnostics/
+.venv-venn/
 __pycache__/
 *.py[cod]
 *$py.class
 .Python
 *.egg-info/
 .eggs/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
 
-# Large/generated data (keep code only)
+# R
+.Rhistory
+.RData
+*.Rproj.user/
+
+# Data (large / local — not tracked)
+data/pdc/
 data/pdc_psm/
+data/ccle_peptide/
 data/results/
+*.mzML
+*.mzXML
+*.raw
 
-# Logs
+# Processed union + method matrices (tracked for reproducibility)
+!data/processed/union/*.csv
+!data/processed/methods/*/transformed_*.csv
+
+# Reports: track canonical summaries; ignore heavy logs
+!reports/benchmark_master/benchmark_results/comparison_summary.csv
+!reports/benchmark_master/benchmark_results/disconnect_scores.csv
+reports/benchmark_master/logs/
 *.log
+
+# Presentation bundle (large; regenerate via scripts/presentation/prepare_all.sh)
+presentation_materials/
+
+# R default plot output (often created at cwd)
+Rplots.pdf
+MSstats_groupComparison_log_*.log
+MSstats_dataProcess_log_*.log
+
+# Vendored Celligner: local builds
+models/celligner-master/mnnpy/build/
+models/celligner-master/**/__pycache__/
+
+# Archive (legacy copies; keep README only)
+archive/*
+!archive/README.md

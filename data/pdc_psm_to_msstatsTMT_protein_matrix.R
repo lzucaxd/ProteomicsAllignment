@@ -293,13 +293,14 @@ load_sample_txt <- function(path) {
 # Returns integer vector (plex row index per run); NA if no match or multiple matches.
 match_runs_to_plex <- function(runs, design_dt, filecol) {
   out <- rep(NA_integer_, length(runs))
+  pats <- as.character(design_dt[[filecol]])
+  valid_pat <- nzchar(trimws(pats))
   for (i in seq_along(runs)) {
     run <- runs[i]
-    matches <- which(vapply(design_dt[[filecol]], function(pat) {
+    matches <- which(valid_pat & vapply(pats, function(pat) {
       grepl(pat, run, ignore.case = TRUE)
     }, logical(1)))
     if (length(matches) == 1L) out[i] <- matches
-    # if 0 or >1, leave NA
   }
   out
 }
@@ -934,6 +935,13 @@ main <- function() {
     gene_path <- file.path(outdir, "gene_matrix.csv")
     fwrite(data.table(GeneSymbol = mat_wide$GeneSymbol, UniProtID = mat_wide$UniProtID, mat), gene_path)
     message("Saved gene matrix (", nrow(mat), " x ", ncol(mat), ") to ", gene_path, " [GeneSymbol + UniProtID]")
+    # Protein-level wide matrix: same sample identity as gene matrix (BioReplicate; median across run/fraction duplicates)
+    prot_wide_dt <- quant_norm_removed[, .(prot = as.character(get(prot_col)), sample = BioReplicate, Abundance = as.numeric(Abundance))]
+    prot_wide_dt <- prot_wide_dt[!is.na(Abundance)]
+    prot_mat <- dcast(prot_wide_dt, prot ~ sample, value.var = "Abundance", fun.aggregate = median, na.rm = TRUE)
+    prot_wide_path <- file.path(outdir, "protein_matrix_wide.csv")
+    fwrite(prot_mat, prot_wide_path)
+    message("Saved protein_matrix_wide.csv (", nrow(prot_mat), " proteins x ", ncol(prot_mat) - 1L, " samples) to ", prot_wide_path)
     qc_summary(NULL, input_dt, quant, data.table(GeneSymbol = rownames(mat)), outdir, NULL)
     return(invisible(NULL))
   }
@@ -1214,6 +1222,12 @@ main <- function() {
   gene_path <- file.path(outdir, "gene_matrix.csv")
   fwrite(data.table(GeneSymbol = mat_wide$GeneSymbol, UniProtID = mat_wide$UniProtID, mat), gene_path)
   message("Saved gene matrix (", nrow(mat), " x ", ncol(mat), ") to ", gene_path, " [GeneSymbol + UniProtID]")
+  prot_wide_dt <- quant_norm_removed[, .(prot = as.character(get(prot_col)), sample = BioReplicate, Abundance = as.numeric(Abundance))]
+  prot_wide_dt <- prot_wide_dt[!is.na(Abundance)]
+  prot_mat <- dcast(prot_wide_dt, prot ~ sample, value.var = "Abundance", fun.aggregate = median, na.rm = TRUE)
+  prot_wide_path <- file.path(outdir, "protein_matrix_wide.csv")
+  fwrite(prot_mat, prot_wide_path)
+  message("Saved protein_matrix_wide.csv (", nrow(prot_mat), " proteins x ", ncol(prot_mat) - 1L, " samples) to ", prot_wide_path)
 
   # Step 7: QC (use full quant for abundance distribution; gene count from matrix)
   qc_summary(parsed_psm, input_dt, quant, data.table(GeneSymbol = rownames(mat)), outdir, annotation_audit_info)

@@ -8,6 +8,7 @@
 #   tidyr        - QC plots
 #
 # Bioconductor:
+#   limma        - Celligner DE step (Python Celligner calls Rscript + limma; no rpy2)
 #   MSstatsTMT   - TMT normalization and protein summarization
 #   org.Hs.eg.db - Human gene symbol mapping (default)
 #   org.Mm.eg.db - Mouse gene symbol mapping (use --species Mm)
@@ -17,5 +18,7 @@
 data.table
 ggplot2
 tidyr
+cowplot
+limma
 MSstatsTMT
 org.Hs.eg.db

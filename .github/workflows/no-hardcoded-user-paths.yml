@@ -1,0 +1,33 @@
+# Fails if portable code reintroduces machine-specific /Users/... paths.
+name: no-hardcoded-user-paths
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Scan scripts, src, and data shell for /Users/
+        run: |
+          set -euo pipefail
+          fail=0
+          if grep -RIl '/Users/' scripts src \
+            --include='*.R' --include='*.py' 2>/dev/null | grep -q .; then
+            echo "::error::Found /Users/ under scripts/ or src/ (.R, .py)"
+            grep -RIn '/Users/' scripts src --include='*.R' --include='*.py' || true
+            fail=1
+          fi
+          if grep -RIl '/Users/' data --include='*.sh' 2>/dev/null | grep -q .; then
+            echo "::error::Found /Users/ under data/*.sh"
+            grep -RIn '/Users/' data --include='*.sh' || true
+            fail=1
+          fi
+          if [[ "$fail" -ne 0 ]]; then
+            echo "Use PROTEOMICS_ALIGNMENT_ROOT, CPTAC_LOCAL_MIRROR, or harmonize_paths.R — see docs/LAB_ONBOARDING.md"
+            exit 1
+          fi
+          echo "OK: no /Users/ in scanned portable paths."

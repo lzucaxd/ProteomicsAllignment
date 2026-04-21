@@ -1,0 +1,53 @@
+# Task B: Breast vs Lung benchmark (coarse biology)
+
+task_name: breast_vs_lung
+contrast: Breast_vs_Lung
+feature_level: gene
+
+block_order:
+  - CPTAC Breast
+  - CCLE Breast
+  - CPTAC Lung
+  - CCLE Lung
+
+markers:
+  - NKX2-1
+  - SFTPB
+  - NAPSA
+  - GATA3
+  - FOXA1
+  - ESR1
+  - EGFR
+  - ERBB2
+  - CDH1
+  - KRT7
+  - MUC1
+
+expected_marker_directions:
+  NKX2-1: up_in_lung
+  SFTPB: up_in_lung
+  NAPSA: up_in_lung
+  GATA3: up_in_breast
+  FOXA1: up_in_breast
+  ESR1: up_in_breast
+  EGFR: variable
+  ERBB2: up_in_breast
+  CDH1: up_in_breast
+  KRT7: variable
+  MUC1: up_in_breast
+
+cptac:
+  breast_study: PDC000120
+  lung_study: PDC000153
+
+ccle:
+  breast_tissue: Breast
+  lung_tissue: Lung
+  # CCLE Breast = all lines in v2 (Basal + Luminal + HER2); Lung still from tissue map.
+  breast_lines_annotation_csv: data/ccle/ccle_breast_subtype_annotations_v2.csv
+
+native_domain_inference:
+  cptac: limma_gene_matrix
+  ccle: limma_gene_matrix
+
+representation_level_inference: limma

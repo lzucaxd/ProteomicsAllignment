@@ -1,0 +1,54 @@
+# Task A: Breast subtype benchmark (Luminal vs Basal)
+
+task_name: breast_subtype
+contrast: Luminal_vs_Basal
+feature_level: gene
+
+block_order:
+  - CPTAC Luminal
+  - CCLE Luminal
+  - CPTAC Basal
+  - CCLE Basal
+
+markers:
+  - ESR1
+  - PGR
+  - GATA3
+  - FOXA1
+  - EGFR
+  - KRT5
+  - KRT17
+  - FOXC1
+
+expected_marker_directions:
+  ESR1: up_in_luminal
+  PGR: up_in_luminal
+  GATA3: up_in_luminal
+  FOXA1: up_in_luminal
+  EGFR: up_in_basal
+  KRT5: up_in_basal
+  KRT17: up_in_basal
+  FOXC1: up_in_basal
+
+cptac:
+  studies: [PDC000120]
+  subtype_mapping: data/results/PDC000120/gene_matrix_subtype_mapping.csv
+  subset_strategy: mixture_balanced
+  conditions:
+    Luminal: [LumA, LumB]
+    Basal: [Basal]
+
+ccle:
+  # Curated Basal / Luminal labels (HER2 excluded from this contrast). If the file
+  # is missing, falls back to basal_lines / luminal_lines below.
+  subtype_annotation_csv: data/ccle/ccle_breast_subtype_annotations_v2.csv
+  subtype_annotation_processed_csv: data/processed/ccle_breast_subtype_annotation_processed.csv
+  subtype_group_column: BvL_group
+  basal_lines: [HCC70, HCC1806, HCC1143, MDA-MB-468]
+  luminal_lines: [CAMA-1, MCF7, T-47D, ZR-75-1]
+
+native_domain_inference:
+  cptac: MSstatsTMT_groupComparisonTMT
+  ccle: limma_gene_matrix
+
+representation_level_inference: limma

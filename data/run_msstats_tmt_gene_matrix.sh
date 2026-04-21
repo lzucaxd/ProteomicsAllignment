@@ -28,12 +28,29 @@ fi
 
 mkdir -p "$OUTDIR"
 
+# Resolve catalog path: absolute, relative to data/, or under CPTAC_LOCAL_MIRROR/
+resolve_sample_txt() {
+  local raw="${1//\"/}"
+  raw="${raw//$'\r'/}"
+  [[ -z "$raw" ]] && return 1
+  if [[ -f "$raw" ]]; then echo "$raw"; return 0; fi
+  local try="$DATA_DIR/$raw"
+  if [[ -f "$try" ]]; then echo "$try"; return 0; fi
+  if [[ -n "${CPTAC_LOCAL_MIRROR:-}" ]]; then
+    try="${CPTAC_LOCAL_MIRROR%/}/$raw"
+    if [[ -f "$try" ]]; then echo "$try"; return 0; fi
+  fi
+  return 1
+}
+
 # Look up sample.txt path from catalog (column 2 = path, column 3 = file_name) for this study
 SAMPLE_TXT=""
 if [[ -f "sample_files_msstats_tmt.csv" ]]; then
-  SAMPLE_TXT=$(awk -F',' -v study="$STUDY" '$1==study {print $2; exit}' sample_files_msstats_tmt.csv)
-  SAMPLE_TXT="${SAMPLE_TXT%"${SAMPLE_TXT##*[![:space:]]}"}"
-  if [[ -z "$SAMPLE_TXT" || ! -f "$SAMPLE_TXT" ]]; then
+  RAW_PATH=$(awk -F',' -v study="$STUDY" '$1==study {print $2; exit}' sample_files_msstats_tmt.csv)
+  RAW_PATH="${RAW_PATH%"${RAW_PATH##*[![:space:]]}"}"
+  if [[ -n "$RAW_PATH" ]] && resolved=$(resolve_sample_txt "$RAW_PATH"); then
+    SAMPLE_TXT="$resolved"
+  else
     SAMPLE_TXT=""
   fi
   # Fallback: try pdc_psm/STUDY/<file_name> or results/STUDY/<file_name>

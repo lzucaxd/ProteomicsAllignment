@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "harmonize"
+version = "0.1.0"
+description = "CPTAC-CCLE proteomics harmonization benchmark framework"
+requires-python = ">=3.10"
+dependencies = [
+    "pandas>=1.5",
+    "numpy>=1.23",
+    "pyyaml>=6.0",
+    "scikit-learn>=1.1",
+    "scipy>=1.9",
+    "matplotlib>=3.6",
+    "statsmodels>=0.13",
+]
+
+[project.optional-dependencies]
+# Celligner: also `pip install ./models/celligner-master/mnnpy` (re-run `cython mnnpy/_utils.pyx` on Python 3.13+ if build fails).
+# R: limma (see install_r_packages.R). DE uses Rscript — no rpy2.
+celligner = [
+    "umap-learn>=0.5",
+    "scanpy>=1.9",
+    "anndata>=0.8",
+    "python-igraph>=0.11",
+    "cython>=3",
+    "numba>=0.59",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]

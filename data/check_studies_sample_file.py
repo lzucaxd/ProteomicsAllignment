@@ -9,6 +9,7 @@ Usage:
   python check_studies_sample_file.py --psm_dir pdc_psm
 """
 import csv
+import os
 import sys
 from pathlib import Path
 
@@ -78,6 +79,23 @@ def main():
     if not sample_rows and not only_study:
         print(f"Warning: no rows in {sample_path}")
 
+    def resolve_sample_path(path_str: str) -> Path:
+        raw = path_str.strip().strip('"').strip("'")
+        if not raw:
+            return Path("")
+        p = Path(raw)
+        if p.is_file():
+            return p
+        rel_data = DATA_DIR / raw
+        if rel_data.is_file():
+            return rel_data
+        mirror = (os.environ.get("CPTAC_LOCAL_MIRROR") or "").strip()
+        if mirror:
+            under_mirror = Path(mirror) / raw
+            if under_mirror.is_file():
+                return under_mirror
+        return rel_data
+
     have = []
     missing = []
     for sid in sorted(studies):
@@ -85,7 +103,8 @@ def main():
         if row:
             path = (row.get("path") or "").strip()
             file_name = (row.get("file_name") or "").strip()
-            path_exists = "yes" if path and Path(path).is_file() else "no (path missing)"
+            path_obj = resolve_sample_path(path) if path else Path("")
+            path_exists = "yes" if path and path_obj.is_file() else "no (path missing)"
             have.append((sid, path_exists, file_name))
         else:
             missing.append(sid)

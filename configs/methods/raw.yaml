@@ -1,0 +1,17 @@
+# Method: Raw shared matrix (no harmonization baseline)
+
+method_name: raw
+display_name: Raw
+description: >
+  Inner-join of shared genes between CPTAC and CCLE with no cross-domain
+  transformation. Serves as the unaligned baseline for the benchmark.
+
+feature_level: gene
+transforms_values: false
+
+parameters:
+  min_obs_frac: 0.50
+
+r_script: scripts/methods/run_raw_representation.R
+
+output_dir: reports/benchmark_master/methods/raw

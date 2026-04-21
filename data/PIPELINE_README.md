@@ -163,9 +163,12 @@ Each study gets its **own** outputs under `results/{study_id}/` and its **own** 
 ### 2. Sample file registry (`sample_files_msstats_tmt.csv`)
 
 - CSV with columns: `study_id`, `path`, `file_name`, `format`, `reference_channel`, `n_channels`, `delimiter`, `use_for_msstats_tmt`, `annotation_path`, `notes`.
-- **path**: full path to the CPTAC `.sample.txt` for that study (e.g. under `.../CPTAC/data/PDC000614/...`).
+- **path**: CPTAC `.sample.txt` for that study. In git this is usually **mirror-relative**, e.g. `PDC000120/CPTAC2_Breast_....sample.txt` (study folder + file name). Resolution order:
+  1. Absolute path, if the file exists.
+  2. Relative to the `data/` directory (`data/<path>`).
+  3. If **`CPTAC_LOCAL_MIRROR`** is set: `<CPTAC_LOCAL_MIRROR>/<path>` (typical: export mirror to the parent of `PDC000120/`, `PDC000153/`, …).
 - **format**: e.g. `TMT10`, `TMT11`; **reference_channel**: e.g. `131`, `126C` (bridge channel).
-- Every study you run **must** have a row here (or the pipeline will warn and may need `--reference_channel` / manual annotation).
+- Every study you run **must** have a row here (or the pipeline will warn and may need `--reference_channel` / manual annotation). Lab setup: [docs/LAB_ONBOARDING.md](../docs/LAB_ONBOARDING.md).
 
 ---
 

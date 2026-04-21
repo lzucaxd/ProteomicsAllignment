@@ -1,0 +1,6 @@
+Annotation notes (v2)
+--------------------
+HCC1500: Luminal (LA) per ER+ / ATCC / Kao2009; Neve2006 basalB is disputed — kept Luminal.
+MDAMB453: HER2 in BvL_group — excluded from Luminal vs Basal; included in BvL Breast group when using full v2 for CCLE breast.
+HER2 lines excluded from subtype contrast: AU565, HCC1954, HCC2218, JIMT1, MDAMB453 (per annotation file).
+

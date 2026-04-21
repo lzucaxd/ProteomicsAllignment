@@ -18,10 +18,11 @@ __pycache__/
 .RData
 .Ruserdata
 
-# Logs
+# Logs (timestamped pipeline logs are disposable)
 *.log
 pipeline_run.log
 MSstatsTMT_summarization*.log
+MSstats_dataProcess_log_*.log
 
 # Jupyter
 .ipynb_checkpoints/
