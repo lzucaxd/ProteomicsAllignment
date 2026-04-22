@@ -61,6 +61,7 @@ Definitions: **`docs/METHODS.md`**.
 ## Data and reproducibility
 
 - **Raw / large data are not in git.** Manifests expire; place fresh PDC exports under `data/manifests/` per **`data/manifests/README.md`** and **`EXPECTED_INPUTS.md`**.
+- **Small annotation tables are in git** (subtype / biospecimen / CCLE line lists): **`data/annotations/README.md`**, **`data/biospecimen/README.md`**, **`data/ccle/README.md`** — so a clone has benchmark **labels** without regenerating mapping scripts first.
 - **Processed matrices** default under `data/results/` and `data/processed/union/` (see `data/README.md`).
 - **Paper freeze:** tag a commit and optionally archive key CSVs externally (Zenodo); see `docs/CLEAN_CLONE_REPRODUCIBILITY.md`.
 
