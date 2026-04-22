@@ -24,6 +24,8 @@ Task definitions: `configs/tasks/breast_subtype.yaml`, `configs/tasks/breast_vs_
 
 Definitions: **`docs/METHODS.md`**.
 
+**Statistical layers (do not conflate):** CPTAC matrices are built with **MSstatsTMT** (TMT design); the overnight benchmark’s cross-method comparison uses **limma** on harmonized gene matrices. One-page map: **`docs/INFERENCE_BASELINES.md`**.
+
 ## Key outputs (where to look first)
 
 | Output | Path |
@@ -37,7 +39,7 @@ Definitions: **`docs/METHODS.md`**.
 
 1. **Environment:** `environment/README.md` → Python venv + `pip install -e .` + `Rscript install_r_packages.R`.
 2. **Verify:** `python3 scripts/verify_repro_setup.py` (add `--require-data` when matrices exist).
-3. **PSM → gene matrix (CPTAC/CCLE):** from `data/` — `data/PIPELINE_README.md`; typical: `./run_pipeline_per_manifest.sh` or `./run_batch_studies.sh`.
+3. **PSM → gene matrix (CPTAC/CCLE):** **`pipeline/psm_to_gene_matrix/README.md`** (table of shell + R entry points); full narrative: `data/PIPELINE_README.md`; typical from `data/`: `./run_pipeline_per_manifest.sh` or `./run_batch_studies.sh`.
 4. **Full benchmark:** **`bash scripts/run_benchmark.sh`** (wrapper for `scripts/benchmark/run_overnight_v2.sh`).
 5. **Diagnostics only (subset):** `./scripts/run_diagnostics.sh preflight` or `… structure` or `… all`.
 6. **Method registry smoke test (Python):** `./scripts/run_methods.sh` (not the same as overnight union matrices; see script header).
@@ -48,10 +50,12 @@ Definitions: **`docs/METHODS.md`**.
 
 1. **`README.md`** (repo home)
 2. **`docs/HOW_TO_RUN_EVERYTHING.md`**
-3. **`data/PIPELINE_README.md`** (manifest → matrix)
-4. **`scripts/benchmark/README.md`** (overnight steps)
-5. **`docs/METHODS.md`**
-6. **`REPO_AUDIT.md`** + **`REPO_LAYOUT_PLAN.md`** (layout and clutter policy)
+3. **`pipeline/psm_to_gene_matrix/README.md`** (manifest → matrix — **not** `data/scripts/`)
+4. **`docs/INFERENCE_BASELINES.md`** (MSstatsTMT vs limma)
+5. **`data/PIPELINE_README.md`** (manifest → matrix — long form)
+6. **`scripts/benchmark/README.md`** (overnight steps)
+7. **`docs/METHODS.md`**
+8. **`REPO_AUDIT.md`** + **`REPO_LAYOUT_PLAN.md`** (layout and clutter policy)
 
 ## Data and reproducibility
 
@@ -62,6 +66,7 @@ Definitions: **`docs/METHODS.md`**.
 ## Known caveats
 
 - **Historical layout:** heavy CPTAC drivers still live under **`data/`**; `scripts/preprocessing/` is mostly documentation.
+- **`data/scripts/`** is **exploratory / legacy** (subtype slides, v1 helpers) — **not** the reproducible manifest→matrix driver; see **`data/scripts/README.md`** and **`pipeline/psm_to_gene_matrix/README.md`**.
 - **Two method paths:** Python `harmonize` registry vs overnight **R** union pipeline — both documented in `scripts/benchmark/README.md` and `HANDOFF_SANITY_CHECK.md`.
 - **Optional Celligner** requires extra Python deps and a local `models/` checkout.
 - **`run_pipeline_per_manifest.sh`** exits non-zero if **no** real manifests are present (only the small `example_pdc_file_manifest.csv`).

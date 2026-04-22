@@ -15,7 +15,9 @@
 | **`configs/`** | YAML: preprocessing sources, tasks, methods, benchmark toggles |
 | **`src/harmonize/`** | Python package: preprocessing helpers, benchmark task defs, method registry |
 | **`data/`** | CPTAC/CCLE pipeline home: PSM download, MSstatsTMT R driver, manifests, results (mostly **gitignored**) |
+| **`pipeline/`** | **Doc-only** index; canonical **manifest → matrix** table: `pipeline/psm_to_gene_matrix/README.md` |
 | **`scripts/benchmark/`** | **Primary benchmark orchestration** (`run_overnight_v2.sh`), metrics, calibration R |
+| **`scripts/exploratory/`** | Policy + preferred place for **new** one-off scripts (not `data/scripts/`) |
 | **`scripts/preprocessing/`** | Documentation index; executables still under `data/` (historical) |
 | **`scripts/methods/`**, **`scripts/presentation/`** | Method drivers and figure/slide pipelines |
 | **`reports/benchmark_master/`** | Benchmark CSVs, diagnostics, meeting figures, **`final_tables/`** for paper-style bundles |
@@ -42,6 +44,8 @@
 ## What must stay **prominent**
 
 - **`docs/HOW_TO_RUN_EVERYTHING.md`** — single run guide
+- **`docs/INFERENCE_BASELINES.md`** — MSstatsTMT vs limma
+- **`pipeline/psm_to_gene_matrix/README.md`** — manifest → matrix entry table
 - **`scripts/benchmark/run_overnight_v2.sh`** — canonical full benchmark
 - **`configs/preprocessing/default.yaml`**, **`configs/tasks/*.yaml`**
 - **`data/PIPELINE_README.md`**, **`data/manifests/README.md`**, **`data/sample_files_msstats_tmt.csv`** (registry)

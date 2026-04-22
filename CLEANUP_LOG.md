@@ -33,6 +33,17 @@ Conservative changes only; anything uncertain stays in place or goes to **`archi
 - **No rename** of `reports/benchmark_master/` to `results/` (widespread R `repo-root` assumptions).
 - **No deletion** of untracked local `reports/` trees on disk (may be paper artifacts); document policy in `HANDOFF.md`.
 
+## 2026-04-21 — Pipeline front door + inference map (doc-only)
+
+| Action | Target | Reason |
+|--------|--------|--------|
+| **Added** | `pipeline/README.md`, `pipeline/psm_to_gene_matrix/README.md` | Single “manifest → matrix” map without moving `data/` drivers |
+| **Added** | `data/scripts/README.md` | Clarify `data/scripts/` ≠ reproducible PDC→matrix path |
+| **Added** | `scripts/exploratory/README.md` | Policy: new one-offs here, not under `data/scripts/` |
+| **Added** | `docs/INFERENCE_BASELINES.md` | Prominent MSstatsTMT vs limma (matrix build vs benchmark) |
+| **Updated** | Root `README.md`, `HANDOFF.md`, `docs/README.md`, `docs/HOW_TO_RUN_EVERYTHING.md`, `data/PIPELINE_README.md`, `data/README.md`, `scripts/README.md`, `scripts/preprocessing/README.md`, `REPO_AUDIT.md`, `reports/final_report/README.md`, `docs/DOC_LINK_CHECK.txt`, `scripts/run_all.py` | Cross-links |
+| **Not done** | `git rm` of `data/scripts/` | Many `reports/*.md` and `PROJECT_REPORT.md` still reference paths; archive+grep would be a separate PR |
+
 ## Future (optional)
 
 - Refresh **`docs/REPO_AUDIT.md`** tree snapshot on a schedule or after refactors.

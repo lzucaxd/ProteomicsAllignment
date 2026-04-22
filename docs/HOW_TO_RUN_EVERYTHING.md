@@ -5,7 +5,8 @@
 | If you need… | Jump to |
 |--------------|---------|
 | Clone, install, verify, what to commit for papers | [Clean clone and checks](#1-clone-install-and-verify) · [CLEAN_CLONE_REPRODUCIBILITY.md](CLEAN_CLONE_REPRODUCIBILITY.md) |
-| PDC manifests → PSM → `gene_matrix.csv` | [PSM / MSstatsTMT preprocessing](#3-preprocessing--psm--gene_matrixcsv) |
+| PDC manifests → PSM → `gene_matrix.csv` (front-door table) | [`../pipeline/psm_to_gene_matrix/README.md`](../pipeline/psm_to_gene_matrix/README.md) · [PSM / MSstatsTMT preprocessing](#3-preprocessing--psm--gene_matrixcsv) |
+| MSstatsTMT vs limma (what runs where) | [`INFERENCE_BASELINES.md`](INFERENCE_BASELINES.md) |
 | Full benchmark after matrices exist | [Overnight benchmark](#4-harmonization-benchmark) |
 | Your paths / other studies (same matrix shape) | [Running on your own data](#6-running-on-your-own-data-paths) |
 | New task or new harmonization method | [HANDOFF_CHECKLIST.md](HANDOFF_CHECKLIST.md) · [config_system_overview.md](config_system_overview.md) |
@@ -14,8 +15,10 @@
 
 ## 0) What you are running (two layers)
 
-1. **Heavy CPTAC/CCLE acquisition and PSM → protein/gene matrices** — mostly under **`data/`** (see [`data/PIPELINE_README.md`](../data/PIPELINE_README.md)).
+1. **Heavy CPTAC/CCLE acquisition and PSM → protein/gene matrices** — mostly under **`data/`** (see [`data/PIPELINE_README.md`](../data/PIPELINE_README.md)). **Front-door file map:** [`../pipeline/psm_to_gene_matrix/README.md`](../pipeline/psm_to_gene_matrix/README.md) — this is **not** the exploratory code under **`data/scripts/`** (see [`../data/scripts/README.md`](../data/scripts/README.md)).
 2. **Harmonization benchmark** (shared gene space, methods, limma, nulls, ceilings, tables) — orchestrated by **`scripts/benchmark/run_overnight_v2.sh`** from the **repo root**.
+
+**Inference map:** MSstatsTMT builds CPTAC matrices; limma evaluates harmonized representations — **[`INFERENCE_BASELINES.md`](INFERENCE_BASELINES.md)**.
 
 Large files are **not** in git; you supply data and manifests as below.
 
@@ -177,7 +180,9 @@ test -f reports/benchmark_master/benchmark_results/comparison_summary.csv && \
 | [`CLEAN_CLONE_REPRODUCIBILITY.md`](CLEAN_CLONE_REPRODUCIBILITY.md) | Verify script, commit/Zenodo policy |
 | [`HANDOFF_CHECKLIST.md`](HANDOFF_CHECKLIST.md) | Lab checklist, extend methods/tasks |
 | [`LAB_ONBOARDING.md`](LAB_ONBOARDING.md) | Mirror paths, env vars |
-| [`data/PIPELINE_README.md`](../data/PIPELINE_README.md) | PDC → matrix pipeline |
+| [`data/PIPELINE_README.md`](../data/PIPELINE_README.md) | PDC → matrix pipeline (long form) |
+| [`../pipeline/psm_to_gene_matrix/README.md`](../pipeline/psm_to_gene_matrix/README.md) | Same pipeline — **entry-point table** (shell + R) |
+| [`INFERENCE_BASELINES.md`](INFERENCE_BASELINES.md) | MSstatsTMT vs limma — where each runs |
 | [`scripts/benchmark/README.md`](../scripts/benchmark/README.md) | Overnight steps 0–n |
 | [`METHODS.md`](METHODS.md) | Raw, bridge, Celligner definitions |
 | [`END_TO_END_TECHNICAL_REPORT.md`](END_TO_END_TECHNICAL_REPORT.md) | Paper-length narrative |

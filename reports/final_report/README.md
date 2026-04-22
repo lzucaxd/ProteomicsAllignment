@@ -37,3 +37,4 @@ Outputs typically under `presentation_materials/figures/report/` (**gitignored**
 
 - **`docs/END_TO_END_TECHNICAL_REPORT.md`**
 - **`docs/METHODS.md`**
+- **`docs/INFERENCE_BASELINES.md`** — MSstatsTMT (matrix build) vs limma (harmonization benchmark)

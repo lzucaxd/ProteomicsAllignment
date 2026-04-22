@@ -5,6 +5,7 @@ Legacy end-to-end benchmark (Python-chained steps).
 Prefer the canonical shell orchestrator for slide-ready v2 output:
   ./scripts/benchmark/run_overnight_v2.sh
 See docs/BENCHMARK_V2_AND_PRESENTATION.md and docs/END_TO_END_TECHNICAL_REPORT.md.
+For MSstatsTMT (matrix build) vs limma (benchmark DA), see docs/INFERENCE_BASELINES.md.
 
 This script runs, in order: preprocessing, native baselines, methods, benchmark, meeting exports.
 Usage:

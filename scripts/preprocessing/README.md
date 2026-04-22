@@ -8,6 +8,7 @@ This stage converts **raw TMT proteomics** (PSM- or peptide-level reporter-ion d
 
 | Artifact / role | Location in this repo |
 |-------------------|------------------------|
+| **Front-door map** (shell + R in one table) | [`pipeline/psm_to_gene_matrix/README.md`](../../pipeline/psm_to_gene_matrix/README.md) |
 | Deep pipeline reference (channels, MSstatsTMT stages, QC) | [`data/PIPELINE_README.md`](../../data/PIPELINE_README.md) |
 | Main R driver (PSM → protein → gene, per study) | [`data/pdc_psm_to_msstatsTMT_protein_matrix.R`](../../data/pdc_psm_to_msstatsTMT_protein_matrix.R) |
 | Batch runner (download + R, space-efficient) | [`data/run_batch_studies.sh`](../../data/run_batch_studies.sh) |

@@ -11,6 +11,8 @@
 | Goal | Document |
 |------|----------|
 | **Run everything (clone → data → benchmark)** | [`docs/HOW_TO_RUN_EVERYTHING.md`](docs/HOW_TO_RUN_EVERYTHING.md) |
+| **Manifest → PSM → gene matrix (front door)** | [`pipeline/psm_to_gene_matrix/README.md`](pipeline/psm_to_gene_matrix/README.md) |
+| **MSstatsTMT (native TMT) vs limma (benchmark)** | [`docs/INFERENCE_BASELINES.md`](docs/INFERENCE_BASELINES.md) |
 | **Lab handoff (new teammate)** | [`HANDOFF.md`](HANDOFF.md) |
 | **Environment (Python + R)** | [`environment/README.md`](environment/README.md) |
 | **Layout & clutter policy** | [`REPO_AUDIT.md`](REPO_AUDIT.md), [`REPO_LAYOUT_PLAN.md`](REPO_LAYOUT_PLAN.md) |
@@ -24,9 +26,11 @@
 ```
 configs/              YAML: preprocessing, tasks, methods, benchmark toggles
 src/harmonize/        Python package (preprocessing, benchmark helpers, methods registry)
+pipeline/             Doc-only index: PSM→matrix front door (see pipeline/psm_to_gene_matrix/)
 data/                 CPTAC/CCLE drivers: PSM download, MSstatsTMT R, manifests (see data/README.md)
 scripts/
   benchmark/          run_overnight_v2.sh (implementation), metrics, calibration R
+  exploratory/        Preferred home for new one-offs (not data/scripts/)
   preprocessing/    Documentation index (executables still under data/)
   run_benchmark.sh    Stable entry → overnight v2
   run_diagnostics.sh  Preflight + structure subset

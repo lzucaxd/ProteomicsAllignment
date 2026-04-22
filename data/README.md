@@ -29,7 +29,7 @@ Some older duplicate matrices may exist under `data/processed/` **and** `data/pr
 
 ### 1) PSM → gene matrices (once per study; long-running)
 
-From repo root, follow **[`data/PIPELINE_README.md`](PIPELINE_README.md)**. Typical entrypoints:
+From repo root, follow **[`../pipeline/psm_to_gene_matrix/README.md`](../pipeline/psm_to_gene_matrix/README.md)** (short map) then **[`data/PIPELINE_README.md`](PIPELINE_README.md)** (full narrative). Typical entrypoints:
 
 ```bash
 cd data

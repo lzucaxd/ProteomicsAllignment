@@ -1,5 +1,7 @@
 # PDC TMT → MSstatsTMT → Gene Matrix Pipeline
 
+**Quick entry (file map):** [`../pipeline/psm_to_gene_matrix/README.md`](../pipeline/psm_to_gene_matrix/README.md) — orchestration shell scripts and R driver names in one table. **Exploratory code** under `data/scripts/` is **not** part of this path; see [`scripts/README.md`](scripts/README.md).
+
 End-to-end documentation for going from PDC file manifests to sample × gene matrices and QC plots.
 
 The pipeline supports **arbitrary TMT plex sizes** (TMT6, TMT10, TMT11, TMT16/TMTpro, TMT18) for **both** CPTAC and CCLE (or other pre-built input):

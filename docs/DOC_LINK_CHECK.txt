@@ -100,3 +100,11 @@ OK REPO_AUDIT.md
 OK REPO_LAYOUT_PLAN.md
 OK CLEANUP_LOG.md
 OK scripts/README_RUNNERS.md
+OK scripts/README.md
+
+## Pipeline + inference docs (2026-04-21)
+OK pipeline/README.md
+OK pipeline/psm_to_gene_matrix/README.md
+OK data/scripts/README.md
+OK scripts/exploratory/README.md
+OK docs/INFERENCE_BASELINES.md
