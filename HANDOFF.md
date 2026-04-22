@@ -46,6 +46,12 @@ Definitions: **`docs/METHODS.md`**.
 
 **Single narrative runbook:** **`docs/HOW_TO_RUN_EVERYTHING.md`**.
 
+## If this feels like too many docs at once
+
+**Smallest useful path (one sitting):** read only **`docs/HOW_TO_RUN_EVERYTHING.md`** end-to-end, then skim **Known caveats** below and **`docs/INFERENCE_BASELINES.md`**. That is enough to run and not mix up MSstatsTMT vs limma.
+
+**Add when you touch code or paths:** **`docs/NAMING_AND_PATHS.md`**. **Add for deep methods / paper text:** **`docs/METHODS.md`**, **`docs/END_TO_END_TECHNICAL_REPORT.md`**. Everything else is index, audit, or history.
+
 ## What to read first
 
 1. **`README.md`** (repo home)
