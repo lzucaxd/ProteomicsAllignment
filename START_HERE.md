@@ -2,28 +2,17 @@
 
 This file is the **default entry** for anyone who landed in the repo from **git** or GitHub and wants to run something without reading the whole doc tree.
 
+**How CPTAC / CCLE sample design becomes the MSstatsTMT annotation table (one doc):** **[`docs/ANNOTATION_FROM_SAMPLES.md`](docs/ANNOTATION_FROM_SAMPLES.md)** — read this if anything about `.sample.txt`, Sheet2, or `annotation_filled*.csv` is unclear.
+
 ---
 
-## 0) Sample files and annotations (CPTAC + CCLE) before you run anything
+## 0) What to place on disk before the data pipeline
 
-Two different layers:
+- **CPTAC:** PDC manifests in **`data/manifests/`**; **`data/sample_files_msstats_tmt.csv`** + real **`*.sample.txt`** (often **`CPTAC_LOCAL_MIRROR`**). Checklist: [`data/manifests/EXPECTED_INPUTS.md`](data/manifests/EXPECTED_INPUTS.md).
+- **CCLE:** either **peptide + sample CSV →** **`data/ccle_peptide/`** converters, **or** a **pre-built `gene_matrix.csv`** path in **`configs/preprocessing/default.yaml`**.
+- **Benchmark labels only (in git):** **`data/annotations/`**, **`data/biospecimen/`**, **`data/ccle/`** — *not* a substitute for CPTAC **`.sample.txt`** for the matrix build (see annotation doc above).
 
-1. **Matrix / MSstatsTMT stage** — CPTAC needs **PDC manifests**, **`data/sample_files_msstats_tmt.csv`**, and the real **`*.sample.txt`** files on disk (often via **`CPTAC_LOCAL_MIRROR`**). CCLE either needs **peptide + sample sheet → converter** (`data/ccle_peptide/`, see **`data/PIPELINE_README.md`**) **or** a **pre-built `gene_matrix.csv`** path in **`configs/preprocessing/default.yaml`**.
-2. **Benchmark subtype / tissue tasks** — small tables in **`data/annotations/`**, **`data/biospecimen/`**, **`data/ccle/`**; they are **in git** and attach labels **after** matrices exist. They **do not** replace CPTAC **`.sample.txt`** for MSstatsTMT.
-
-| CPTAC — you need | Where |
-|------------------|--------|
-| PDC manifest CSV (`.psm` rows) | `data/manifests/` — [`data/manifests/README.md`](data/manifests/README.md) |
-| Registry linking each study to its **`.sample.txt`** | **`data/sample_files_msstats_tmt.csv`** |
-| Physical **`.sample.txt`** files | Paths in that CSV + mirror / [`docs/LAB_ONBOARDING.md`](docs/LAB_ONBOARDING.md); some studies: [`data/cptac_samples/`](data/cptac_samples/) READMEs |
-| MSstats annotation CSVs produced by the R run | **`data/results/{study_id}/`** (`annotation_filled_corrected.csv`, …) — local outputs, not the benchmark `data/annotations/` tree |
-
-| CCLE — pick one path | Notes |
-|----------------------|--------|
-| **Peptide → MSstats → R** | **`data/ccle_peptide/`** + **`data/PIPELINE_README.md`** (CCLE / `--msstats_input_dir`) |
-| **Skip to gene matrix** | Configure **`configs/preprocessing/default.yaml`** (e.g. `data/results/CCLE_corrected/gene_matrix.csv`) |
-
-Checklist: [`data/manifests/EXPECTED_INPUTS.md`](data/manifests/EXPECTED_INPUTS.md). Full table: **[`pipeline/psm_to_gene_matrix/README.md`](pipeline/psm_to_gene_matrix/README.md)** (section **Required inputs**).
+Script map: **[`pipeline/psm_to_gene_matrix/README.md`](pipeline/psm_to_gene_matrix/README.md)**.
 
 ---
 

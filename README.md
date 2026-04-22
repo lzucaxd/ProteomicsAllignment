@@ -10,9 +10,13 @@
 
 **Default entry (data pipeline + run order):** **[`START_HERE.md`](START_HERE.md)** — optimized for GitHub / first clone; leads with **how to run the data pipeline** (`PSM` → **`gene_matrix.csv`**) and where the scripts live.
 
+**How sample design becomes MSstatsTMT annotation (CPTAC + CCLE, one page):** **[`docs/ANNOTATION_FROM_SAMPLES.md`](docs/ANNOTATION_FROM_SAMPLES.md)**.
+
 **Single end-to-end runbook:** [`docs/HOW_TO_RUN_EVERYTHING.md`](docs/HOW_TO_RUN_EVERYTHING.md).
 
-**Data pipeline file map (shell + R under `data/`):** [`pipeline/psm_to_gene_matrix/README.md`](pipeline/psm_to_gene_matrix/README.md) — includes **CPTAC manifests + `sample_files_msstats_tmt.csv` + `.sample.txt`**, **CCLE peptide vs pre-built matrix**, and how that differs from **benchmark** annotation tables in **`data/annotations/`**.
+**Data pipeline file map (shell + R under `data/`):** [`pipeline/psm_to_gene_matrix/README.md`](pipeline/psm_to_gene_matrix/README.md).
+
+**Keep the doc set small:** `START_HERE` → `ANNOTATION_FROM_SAMPLES` (if needed) → `HOW_TO_RUN_EVERYTHING` → `HANDOFF`. Other files are optional depth.
 
 ---
 
@@ -21,6 +25,7 @@
 | Goal | Document |
 |------|----------|
 | **First clone (start here)** | **[`START_HERE.md`](START_HERE.md)** |
+| **Sample files → MSstats annotation (CPTAC + CCLE)** | **[`docs/ANNOTATION_FROM_SAMPLES.md`](docs/ANNOTATION_FROM_SAMPLES.md)** |
 | **Run everything (clone → data → benchmark)** | [`docs/HOW_TO_RUN_EVERYTHING.md`](docs/HOW_TO_RUN_EVERYTHING.md) |
 | **Manifest → PSM → gene matrix (front door)** | [`pipeline/psm_to_gene_matrix/README.md`](pipeline/psm_to_gene_matrix/README.md) |
 | **MSstatsTMT (native TMT) vs limma (benchmark)** | [`docs/INFERENCE_BASELINES.md`](docs/INFERENCE_BASELINES.md) |

@@ -1,6 +1,6 @@
 # Lab handoff — Proteomics alignment benchmark
 
-**Default entry from git / GitHub:** **[`START_HERE.md`](START_HERE.md)** (data pipeline + how to run + links here).
+**Default entry from git / GitHub:** **[`START_HERE.md`](START_HERE.md)** (data pipeline + how to run + links here). **Sample → MSstats annotation (CPTAC + CCLE):** **[`docs/ANNOTATION_FROM_SAMPLES.md`](docs/ANNOTATION_FROM_SAMPLES.md)**.
 
 **Audience:** A technically strong lab member who did not work on the repo day-to-day.
 
@@ -52,6 +52,8 @@ Definitions: **`docs/METHODS.md`**.
 
 **Smallest useful path (one sitting):** read only **`docs/HOW_TO_RUN_EVERYTHING.md`** end-to-end, then skim **Known caveats** below and **`docs/INFERENCE_BASELINES.md`**. That is enough to run and not mix up MSstatsTMT vs limma.
 
+**If sample / annotation is confusing:** read **`docs/ANNOTATION_FROM_SAMPLES.md`** only (CPTAC `sample.txt` vs CCLE Sheet2 + Python → same R driver).
+
 **Add when you touch code or paths:** **`docs/NAMING_AND_PATHS.md`**. **Add for deep methods / paper text:** **`docs/METHODS.md`**, **`docs/END_TO_END_TECHNICAL_REPORT.md`**. Everything else is index, audit, or history.
 
 ## What to read first
@@ -59,17 +61,18 @@ Definitions: **`docs/METHODS.md`**.
 1. **`README.md`** (repo home)
 2. **`docs/HOW_TO_RUN_EVERYTHING.md`**
 3. **`pipeline/psm_to_gene_matrix/README.md`** (manifest → matrix — **not** `data/scripts/`)
-4. **`docs/INFERENCE_BASELINES.md`** (MSstatsTMT vs limma)
-5. **`data/PIPELINE_README.md`** (manifest → matrix — long form)
-6. **`scripts/benchmark/README.md`** (overnight steps)
-7. **`docs/METHODS.md`**
-8. **`docs/NAMING_AND_PATHS.md`** (why `data/` vs `scripts/` vs `reports/`; naming for new files)
-9. **`REPO_AUDIT.md`** + **`REPO_LAYOUT_PLAN.md`** (layout and clutter policy)
+4. **`docs/ANNOTATION_FROM_SAMPLES.md`** (CPTAC / CCLE sample design → MSstats table)
+5. **`docs/INFERENCE_BASELINES.md`** (MSstatsTMT vs limma)
+6. **`data/PIPELINE_README.md`** (manifest → matrix — long form)
+7. **`scripts/benchmark/README.md`** (overnight steps)
+8. **`docs/METHODS.md`**
+9. **`docs/NAMING_AND_PATHS.md`** (why `data/` vs `scripts/` vs `reports/`; naming for new files)
+10. **`REPO_AUDIT.md`** + **`REPO_LAYOUT_PLAN.md`** (layout and clutter policy)
 
 ## Data and reproducibility
 
 - **Raw / large data are not in git.** Manifests expire; place fresh PDC exports under `data/manifests/` per **`data/manifests/README.md`** and **`EXPECTED_INPUTS.md`**.
-- **Small annotation tables are in git** (subtype / biospecimen / CCLE line lists): **`data/annotations/README.md`**, **`data/biospecimen/README.md`**, **`data/ccle/README.md`** — so a clone has benchmark **labels** without regenerating mapping scripts first. **CPTAC matrix build** still requires **PDC manifests**, **`data/sample_files_msstats_tmt.csv`**, and real **`*.sample.txt`** files on disk (see **`START_HERE.md`** §0 and **`pipeline/psm_to_gene_matrix/README.md`**).
+- **Small annotation tables are in git** (subtype / biospecimen / CCLE line lists): **`data/annotations/README.md`**, **`data/biospecimen/README.md`**, **`data/ccle/README.md`** — so a clone has benchmark **labels** without regenerating mapping scripts first. **CPTAC matrix build** still requires **PDC manifests**, **`data/sample_files_msstats_tmt.csv`**, and real **`*.sample.txt`** files on disk (**`START_HERE.md`**, **`docs/ANNOTATION_FROM_SAMPLES.md`**).
 - **Processed matrices** default under `data/results/` and `data/processed/union/` (see `data/README.md`).
 - **Paper freeze:** tag a commit and optionally archive key CSVs externally (Zenodo); see `docs/CLEAN_CLONE_REPRODUCIBILITY.md`.
 

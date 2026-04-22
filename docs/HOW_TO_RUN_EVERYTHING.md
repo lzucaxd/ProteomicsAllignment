@@ -1,6 +1,6 @@
 # How to run everything
 
-**Cloning from git?** Read **[`../START_HERE.md`](../START_HERE.md)** first — it foregrounds the **data pipeline** (`PSM` → **`gene_matrix.csv`**) and points here for the full narrative.
+**Cloning from git?** Read **[`../START_HERE.md`](../START_HERE.md)** first — it foregrounds the **data pipeline** (`PSM` → **`gene_matrix.csv`**) and points here for the full narrative. **How CPTAC / CCLE sample files become MSstatsTMT annotation:** **[`ANNOTATION_FROM_SAMPLES.md`](ANNOTATION_FROM_SAMPLES.md)**.
 
 **This is the single entry-point guide** for going from a **fresh clone** to **benchmark outputs**, including **where to point the pipeline at your files**. Deep design and methods live elsewhere (see [Documentation map](#documentation-map) at the end).
 
@@ -8,6 +8,7 @@
 |--------------|---------|
 | Clone, install, verify, what to commit for papers | [Clean clone and checks](#1-clone-install-and-verify) · [CLEAN_CLONE_REPRODUCIBILITY.md](CLEAN_CLONE_REPRODUCIBILITY.md) |
 | PDC manifests → PSM → `gene_matrix.csv` (front-door table) | [`../pipeline/psm_to_gene_matrix/README.md`](../pipeline/psm_to_gene_matrix/README.md) · [PSM / MSstatsTMT preprocessing](#3-preprocessing--psm--gene_matrixcsv) |
+| CPTAC / CCLE sample design → MSstats annotation | [`ANNOTATION_FROM_SAMPLES.md`](ANNOTATION_FROM_SAMPLES.md) |
 | MSstatsTMT vs limma (what runs where) | [`INFERENCE_BASELINES.md`](INFERENCE_BASELINES.md) |
 | Repo layout / naming (why things look scattered) | [`NAMING_AND_PATHS.md`](NAMING_AND_PATHS.md) |
 | Full benchmark after matrices exist | [Overnight benchmark](#4-harmonization-benchmark) |
@@ -186,6 +187,7 @@ test -f reports/benchmark_master/benchmark_results/comparison_summary.csv && \
 | [`LAB_ONBOARDING.md`](LAB_ONBOARDING.md) | Mirror paths, env vars |
 | [`data/PIPELINE_README.md`](../data/PIPELINE_README.md) | PDC → matrix pipeline (long form) |
 | [`../pipeline/psm_to_gene_matrix/README.md`](../pipeline/psm_to_gene_matrix/README.md) | Same pipeline — **entry-point table** (shell + R) |
+| [`ANNOTATION_FROM_SAMPLES.md`](ANNOTATION_FROM_SAMPLES.md) | **Sample files → MSstats annotation** (CPTAC + CCLE) |
 | [`INFERENCE_BASELINES.md`](INFERENCE_BASELINES.md) | MSstatsTMT vs limma — where each runs |
 | [`NAMING_AND_PATHS.md`](NAMING_AND_PATHS.md) | Why paths are scattered; naming rules for new files |
 | [`scripts/benchmark/README.md`](../scripts/benchmark/README.md) | Overnight steps 0–n |

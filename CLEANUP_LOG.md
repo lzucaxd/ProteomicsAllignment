@@ -72,6 +72,14 @@ Conservative changes only; anything uncertain stays in place or goes to **`archi
 |--------|--------|--------|
 | **Updated** | `pipeline/psm_to_gene_matrix/README.md`, `START_HERE.md` §0, `data/manifests/EXPECTED_INPUTS.md`, `README.md` (clone + pipeline bullets) | Explicit **manifests, `sample_files_msstats_tmt.csv`, `.sample.txt`, mirror**, **CCLE peptide vs pre-built matrix**, vs **benchmark** `data/annotations/` tables |
 
+## 2026-04-21 — Single doc: annotation from samples + simpler entry points
+
+| Action | Target | Reason |
+|--------|--------|--------|
+| **Added** | **`docs/ANNOTATION_FROM_SAMPLES.md`** | One narrative for CPTAC **`sample.txt` → annotation** and **CCLE Sheet2 + converter → annotation**; same R driver with `--msstats_input_dir` |
+| **Slimmed** | `START_HERE.md` §0, `pipeline/psm_to_gene_matrix/README.md` inputs section | Point to the new doc instead of duplicating tables |
+| **Updated** | `README.md`, `HANDOFF.md`, `docs/README.md`, `docs/HOW_TO_RUN_EVERYTHING.md`, `docs/NAMING_AND_PATHS.md`, `pipeline/README.md`, `data/ccle_peptide/README_CCLE.md`, `docs/DOC_LINK_CHECK.txt` | Cross-links + “small doc spine” line on README |
+
 ## Future (optional)
 
 - Refresh **`docs/REPO_AUDIT.md`** tree snapshot on a schedule or after refactors.

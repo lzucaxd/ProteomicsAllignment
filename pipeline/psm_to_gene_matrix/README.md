@@ -2,33 +2,13 @@
 
 This is the **lab handoff “front door”** for the heavy preprocessing stage. Implementations remain under **`data/`** (historical paths used by shell, R, and Python across the repo).
 
-## Required inputs: CPTAC sample files, annotations, CCLE
+## Sample files → MSstatsTMT annotation (read this first)
 
-Do not confuse **(A) MSstatsTMT design files** (needed to run the matrix pipeline) with **(B) benchmark subtype / biospecimen tables** (small CSVs in git for Luminal–Basal tasks **after** `gene_matrix.csv` exist).
+**One canonical explanation (CPTAC `*.sample.txt` + CCLE Sheet2 / converter → same R script):** **[`../../docs/ANNOTATION_FROM_SAMPLES.md`](../../docs/ANNOTATION_FROM_SAMPLES.md)**.
 
-### CPTAC (clinical TMT)
+**Checklist of paths on disk:** [`../../data/manifests/EXPECTED_INPUTS.md`](../../data/manifests/EXPECTED_INPUTS.md). **Mirror / env:** [`../../docs/LAB_ONBOARDING.md`](../../docs/LAB_ONBOARDING.md).
 
-| Input | Where it lives | Role |
-|--------|----------------|------|
-| **PDC manifest CSV** | `data/manifests/` (local export; URLs expire) | Lists `.psm` URLs for **`pdc_manifest_downloader.py`**. |
-| **Study registry** | **`data/sample_files_msstats_tmt.csv`** | One row per `study_id`: mirror-relative **`path`** to that study’s **`*.sample.txt`**, TMT format, `reference_channel`, optional **`annotation_path`**, `use_for_msstats_tmt`. |
-| **`*.sample.txt` on disk** | Resolved via **`path`** + often **`CPTAC_LOCAL_MIRROR`** (parent of `PDC000120/`, …) | **MSstatsTMT channel / mixture / bridge design**; R uses `--sample_txt` to build or correct **`annotation_filled_corrected.csv`** under `data/results/{study_id}/`. |
-| **Per-study annotation CSVs** | Usually created under **`data/results/{study_id}/`** (`annotation_filled*.csv`) | Produced or updated by the R driver from the sample file; not the same as `data/annotations/` (benchmark mapping). |
-
-Details: **`data/manifests/EXPECTED_INPUTS.md`** §1–2, **`data/PIPELINE_README.md`** (registry + `--sample_txt`), **`docs/LAB_ONBOARDING.md`** (mirror env vars).
-
-### CCLE (preclinical path through the same R driver)
-
-| Input | Where | Role |
-|-------|--------|------|
-| **Peptide TSV + sample table** | Typically **`data/ccle_peptide/`** (see READMEs there) | Convert to **`msstats_input.tsv`** + annotation via **`ccle_to_msstats_input.py`**. |
-| **Run R with `--msstats_input_dir`** | e.g. `results/CCLE` | Same **`pdc_psm_to_msstatsTMT_protein_matrix.R`** path as CPTAC, skipping PSM parse when input is already MSstats-shaped. |
-
-Benchmark-only CCLE **gene matrix** path (often already summarized): **`configs/preprocessing/default.yaml`** → e.g. `data/results/CCLE_corrected/gene_matrix.csv` — that is **downstream** of peptide conversion unless you only ingest a pre-built matrix.
-
-### Benchmark tables in git (not a substitute for `.sample.txt`)
-
-**`data/annotations/`**, **`data/biospecimen/`**, **`data/ccle/ccle_breast_subtype_annotations_v2.csv`** — used for **task labels** (subtype, tissue contrasts) and preprocessing metadata **after** matrices exist. They do **not** replace CPTAC **`sample_files_msstats_tmt.csv`** + **`.sample.txt`** for running MSstatsTMT on PSMs.
+Do not confuse **MSstats design** (above) with **benchmark subtype tables** in **`data/annotations/`** / **`data/biospecimen/`** — those label samples for tasks **after** `gene_matrix.csv` exist.
 
 ---
 

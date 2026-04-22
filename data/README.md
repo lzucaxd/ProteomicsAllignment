@@ -1,6 +1,6 @@
 # Data provenance
 
-**How to run the data pipeline (PSM → matrix):** repo root **[`../START_HERE.md`](../START_HERE.md)** and **[`../pipeline/psm_to_gene_matrix/README.md`](../pipeline/psm_to_gene_matrix/README.md)**.
+**How to run the data pipeline (PSM → matrix):** **[`../START_HERE.md`](../START_HERE.md)** and **[`../pipeline/psm_to_gene_matrix/README.md`](../pipeline/psm_to_gene_matrix/README.md)**. **How sample files become MSstats annotation (CPTAC + CCLE):** **[`../docs/ANNOTATION_FROM_SAMPLES.md`](../docs/ANNOTATION_FROM_SAMPLES.md)**.
 
 This repository’s **clone name** is `ProteomicsAllignment` (historical spelling on disk). Paths below are **relative to the repo root**.
 

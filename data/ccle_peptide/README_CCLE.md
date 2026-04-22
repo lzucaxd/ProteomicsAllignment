@@ -1,5 +1,7 @@
 # CCLE peptide data → pipeline
 
+**Same story as CPTAC, in one place:** conceptual overview of sample design → MSstats annotation for **both** domains is **[`../../docs/ANNOTATION_FROM_SAMPLES.md`](../../docs/ANNOTATION_FROM_SAMPLES.md)** (this file is the CCLE-specific runbook).
+
 Use the **same** MSstatsTMT → gene matrix pipeline for CCLE peptide-level data without changing CPTAC (PDC) studies.
 
 The pipeline supports **arbitrary TMT plex sizes** (TMT6, TMT10, TMT11, TMT16/TMTpro, TMT18). Channel columns are **automatically detected** from reporter-ion intensity fields (e.g. `rq_126_sn`, `rq_127n_sn`, `rq_127c_sn`). The annotation file follows the MSstatsTMT schema and requires **exactly one bridge (Condition = Norm) per mixture**.

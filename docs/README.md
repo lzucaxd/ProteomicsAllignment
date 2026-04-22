@@ -5,6 +5,7 @@
 | Doc | Use when you need… |
 |-----|---------------------|
 | **[../START_HERE.md](../START_HERE.md)** | **First clone from git:** data pipeline run order, benchmark, minimal doc path. |
+| **[ANNOTATION_FROM_SAMPLES.md](ANNOTATION_FROM_SAMPLES.md)** | **One page:** CPTAC `sample.txt` + CCLE Sheet2 / converter → MSstatsTMT annotation (same R driver). |
 | **[../HANDOFF.md](../HANDOFF.md)** | New teammate: project scope, outputs, caveats (repo root). |
 | **[../HANDOFF_SANITY_CHECK.md](../HANDOFF_SANITY_CHECK.md)** | Verified vs manual follow-ups. |
 | **[../REPO_AUDIT.md](../REPO_AUDIT.md)** | High-level layout + ignore/archive policy (repo root). |

@@ -1,6 +1,6 @@
 # Pipeline index
 
-**Cloning from git?** Start at **[`../START_HERE.md`](../START_HERE.md)** — it highlights this data pipeline first, then the benchmark.
+**Cloning from git?** Start at **[`../START_HERE.md`](../START_HERE.md)** — it highlights this data pipeline first, then the benchmark. **How sample files build MSstats annotation:** **[`../docs/ANNOTATION_FROM_SAMPLES.md`](../docs/ANNOTATION_FROM_SAMPLES.md)**.
 
 | Pipeline | Front door |
 |----------|------------|
