@@ -75,8 +75,9 @@ Reproducibility / commit policy for paper runs: **[CLEAN_CLONE_REPRODUCIBILITY.m
 | What | Where it comes from | Where it goes in this repo |
 |------|---------------------|----------------------------|
 | **PDC file manifest CSV** per study | [NCI PDC](https://pdc.cancer.gov/) → study → **Files** → filter to **PSM** / **`.psm`** → **Export** manifest | `data/manifests/` — **how to name and refresh:** [`data/manifests/README.md`](../data/manifests/README.md) |
-| **CPTAC MSstatsTMT design** (`.sample.txt`) | Study bundle or lab mirror | Paths in **`data/sample_files_msstats_tmt.csv`** (column `path`); resolve with **`CPTAC_LOCAL_MIRROR`** if relative |
-| **CCLE** inputs + processed matrix | Your lab pipeline | Benchmark expects **`data/results/CCLE_corrected/gene_matrix.csv`** (and inputs under `data/ccle_peptide/` as documented) |
+| **CPTAC MSstatsTMT design** (`.sample.txt`) | Study bundle or lab mirror | **`data/sample_files_msstats_tmt.csv`** lists each study’s **`path`** to `*.sample.txt`; resolve with **`CPTAC_LOCAL_MIRROR`** when paths are mirror-relative. Optional per-row **`annotation_path`**. Per-run MSstats annotation CSVs are written under **`data/results/{study_id}/`**. |
+| **CCLE** — peptide → matrix **or** gene matrix only | Your lab pipeline | **Peptide path:** inputs under **`data/ccle_peptide/`** → MSstats-shaped files → same R driver (**[`data/PIPELINE_README.md`](../data/PIPELINE_README.md)** CCLE section). **Pre-built matrix:** e.g. **`data/results/CCLE_corrected/gene_matrix.csv`** (override in **`configs/preprocessing/default.yaml`**). |
+| **Benchmark subtype / biospecimen labels** (small; often already in git) | Curated tables for tasks | **`data/annotations/`**, **`data/biospecimen/`**, **`data/ccle/`** — used for **task metadata** (Luminal/Basal, etc.), **not** a substitute for CPTAC **`.sample.txt`** for the MSstatsTMT matrix build. See [`data/annotations/README.md`](../data/annotations/README.md). |
 
 **Manifest URLs expire** (~often a week); refresh the manifest from PDC if downloads return **HTTP 403**. The manifest must list **`.psm`** files, not only `.mzid.gz`. See root **`README.md`** (repo home) for the same table with footnotes, and **`data/cptac_samples/`** READMEs for study-specific notes.
 

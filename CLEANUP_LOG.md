@@ -59,6 +59,19 @@ Conservative changes only; anything uncertain stays in place or goes to **`archi
 | **Updated** | `configs/preprocessing/*.yaml`, `configs/tasks/breast_subtype.yaml`, `src/harmonize/utils/paths.py`, R benchmark scripts, `build_PDC000120_subtype_mapping.py` | Point preprocessing at tracked mapping; script writes annotations + mirrors under `results/` when present |
 | **Added / tracked** | `data/biospecimen/*`, `data/biospecimen/README.md`, `data/ccle/README.md`, `data/cptac_samples/` study README | Push biospecimen + CCLE label provenance the user asked to share |
 
+## 2026-04-21 — START_HERE for git clones + README pipeline emphasis
+
+| Action | Target | Reason |
+|--------|--------|--------|
+| **Added** | Root **`START_HERE.md`** | Obvious GitHub / `git clone` entry; leads with data pipeline + run commands |
+| **Updated** | `README.md`, `CONTRIBUTING.md`, `HANDOFF.md`, `docs/README.md`, `docs/HOW_TO_RUN_EVERYTHING.md`, `pipeline/README.md`, `data/README.md`, `docs/DOC_LINK_CHECK.txt` | Point first-time readers at `START_HERE.md`; rename README section to “Data pipeline and benchmark” |
+
+## 2026-04-21 — CPTAC/CCLE sample + annotation docs for data pipeline
+
+| Action | Target | Reason |
+|--------|--------|--------|
+| **Updated** | `pipeline/psm_to_gene_matrix/README.md`, `START_HERE.md` §0, `data/manifests/EXPECTED_INPUTS.md`, `README.md` (clone + pipeline bullets) | Explicit **manifests, `sample_files_msstats_tmt.csv`, `.sample.txt`, mirror**, **CCLE peptide vs pre-built matrix**, vs **benchmark** `data/annotations/` tables |
+
 ## Future (optional)
 
 - Refresh **`docs/REPO_AUDIT.md`** tree snapshot on a schedule or after refactors.

@@ -12,7 +12,7 @@
 
 **Single end-to-end runbook:** [`docs/HOW_TO_RUN_EVERYTHING.md`](docs/HOW_TO_RUN_EVERYTHING.md).
 
-**Data pipeline file map (shell + R under `data/`):** [`pipeline/psm_to_gene_matrix/README.md`](pipeline/psm_to_gene_matrix/README.md).
+**Data pipeline file map (shell + R under `data/`):** [`pipeline/psm_to_gene_matrix/README.md`](pipeline/psm_to_gene_matrix/README.md) — includes **CPTAC manifests + `sample_files_msstats_tmt.csv` + `.sample.txt`**, **CCLE peptide vs pre-built matrix**, and how that differs from **benchmark** annotation tables in **`data/annotations/`**.
 
 ---
 
@@ -77,8 +77,8 @@ Details and optional Celligner: **`environment/README.md`**.
 
 **Same content, more detail:** **[`START_HERE.md`](START_HERE.md)** and **[`pipeline/psm_to_gene_matrix/README.md`](pipeline/psm_to_gene_matrix/README.md)**.
 
-1. **Inputs:** PDC manifests + CPTAC `.sample.txt` paths + CCLE matrices — **`data/manifests/README.md`**, **`data/manifests/EXPECTED_INPUTS.md`**, **`data/PIPELINE_README.md`** (deep dive).
-2. **Data pipeline — PSM → `gene_matrix.csv`:** run from **`data/`**: `./run_pipeline_per_manifest.sh` or `./run_batch_studies.sh` (often needs **`CPTAC_LOCAL_MIRROR`**; see **`docs/LAB_ONBOARDING.md`**). Driver table: **`pipeline/psm_to_gene_matrix/README.md`**.
+1. **Inputs:** PDC **manifests**; CPTAC **`data/sample_files_msstats_tmt.csv`** + on-disk **`*.sample.txt`** (design for MSstatsTMT); CCLE either **peptide pipeline** under **`data/ccle_peptide/`** or a **pre-built `gene_matrix.csv`** in **`configs/preprocessing/default.yaml`**. Benchmark **subtype/biospecimen** tables in **`data/annotations/`**, **`data/biospecimen/`**, **`data/ccle/`** are separate (see **`data/manifests/EXPECTED_INPUTS.md`**, **`data/PIPELINE_README.md`**).
+2. **Data pipeline — PSM → `gene_matrix.csv`:** run from **`data/`**: `./run_pipeline_per_manifest.sh` or `./run_batch_studies.sh` (often needs **`CPTAC_LOCAL_MIRROR`**; see **`docs/LAB_ONBOARDING.md`**). Driver + input table: **`pipeline/psm_to_gene_matrix/README.md`**.
 3. **Benchmark (after matrices exist):** from repo root: **`bash scripts/run_benchmark.sh`** (hours; steps in **`scripts/benchmark/README.md`**).
 
 **Primary outputs:** `reports/benchmark_master/benchmark_results/comparison_summary.csv`, `disconnect_scores.csv`. **Index:** `reports/final_report/README.md`.
