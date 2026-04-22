@@ -2,6 +2,8 @@
 
 This repository is meant to work on **any machine** after clone: no hardcoded home-directory paths in scripts under `scripts/`, `src/`, or portable `data/*.sh` helpers.
 
+**Full pipeline (one doc):** **[`HOW_TO_RUN_EVERYTHING.md`](HOW_TO_RUN_EVERYTHING.md)**. For verify / commit policy only, see **[`CLEAN_CLONE_REPRODUCIBILITY.md`](CLEAN_CLONE_REPRODUCIBILITY.md)**.
+
 ---
 
 ## 1. Clone and Python
@@ -11,8 +13,11 @@ git clone <your-fork-or-upstream-url> ProteomicsAllignment
 cd ProteomicsAllignment
 python3 -m venv .venv
 source .venv/bin/activate   # Windows: .venv\Scripts\activate
+pip install -U pip
 pip install -r requirements.txt
-pip install -e ".[celligner]"   # optional: harmonization benchmark + Celligner
+pip install -e .
+pip install -e ".[celligner]"   # optional: Celligner extras only
+python3 scripts/verify_repro_setup.py
 ```
 
 Benchmark / preprocessing Python code expects:

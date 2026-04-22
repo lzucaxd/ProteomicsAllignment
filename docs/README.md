@@ -4,6 +4,8 @@
 
 | Doc | Use when you need… |
 |-----|---------------------|
+| **[HOW_TO_RUN_EVERYTHING.md](HOW_TO_RUN_EVERYTHING.md)** | **Run the full pipeline:** data → matrices → benchmark → custom paths. |
+| **[CLEAN_CLONE_REPRODUCIBILITY.md](CLEAN_CLONE_REPRODUCIBILITY.md)** | Fresh clone: verify script, data policy, what to commit for papers. |
 | **[HANDOFF_CHECKLIST.md](HANDOFF_CHECKLIST.md)** | Lab pickup: reproduce, extend methods/tasks, path checks. |
 | **[REPO_AUDIT.md](REPO_AUDIT.md)** | Machine-generated tree snapshot (refresh after major moves). |
 | **[METHODS.md](METHODS.md)** | Harmonization methods (raw, bridge, Celligner) for papers. |
@@ -12,7 +14,7 @@
 | **[LAB_ONBOARDING.md](LAB_ONBOARDING.md)** | Clone on any machine: `CPTAC_LOCAL_MIRROR`, `PROTEOMICS_ALIGNMENT_ROOT`, Python/R. |
 | **[END_TO_END_TECHNICAL_REPORT.md](END_TO_END_TECHNICAL_REPORT.md)** | Paper / supplement: full pipeline, methods, metrics, figures, reproducibility. |
 | **[BENCHMARK_V2_AND_PRESENTATION.md](BENCHMARK_V2_AND_PRESENTATION.md)** | Slides + v2 benchmark: steps, paths, checklist. |
-| [how_to_run_end_to_end.md](how_to_run_end_to_end.md) | One-page pointer: overnight v2 vs legacy `run_all.py`. |
+| [how_to_run_end_to_end.md](how_to_run_end_to_end.md) | Short pointer → **HOW_TO_RUN_EVERYTHING.md**. |
 
 Repo root **[README.md](../README.md)** — PDC setup, Celligner extras, layout.  
 **[data/PIPELINE_README.md](../data/PIPELINE_README.md)** — PDC → MSstatsTMT → matrix.

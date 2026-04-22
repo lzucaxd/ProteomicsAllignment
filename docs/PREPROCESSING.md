@@ -1,5 +1,6 @@
 # Preprocessing (index)
 
+**Full pipeline (includes this step):** [`HOW_TO_RUN_EVERYTHING.md`](HOW_TO_RUN_EVERYTHING.md)  
 **Authoritative technical detail:** [`data/PIPELINE_README.md`](../data/PIPELINE_README.md)  
 **Narrative + repo paths:** [`scripts/preprocessing/README.md`](../scripts/preprocessing/README.md)  
 **Provenance:** [`data/README.md`](../data/README.md)

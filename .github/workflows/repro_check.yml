@@ -1,0 +1,23 @@
+# Verifies Python + harmonize imports on a clean install (no large data, no R).
+name: repro-python
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install Python dependencies
+        run: |
+          python -m pip install -U pip
+          pip install -r requirements.txt
+          pip install -e .
+      - name: Verify reproducibility setup (Python only)
+        run: python scripts/verify_repro_setup.py --skip-r

@@ -74,6 +74,7 @@ OK scripts/run_meeting_exports.py
 OK scripts/run_methods.py
 OK scripts/run_native_baselines.py
 OK scripts/run_preprocessing.py
+OK scripts/verify_repro_setup.py
 
 ## Config paths
 OK configs/preprocessing/default.yaml

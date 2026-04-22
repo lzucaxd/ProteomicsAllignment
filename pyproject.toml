@@ -1,6 +1,7 @@
 [build-system]
-requires = ["setuptools>=64"]
-build-backend = "setuptools.backends._legacy:_Backend"
+# Standard PEP 517 backend (setuptools.backends._legacy was removed in newer setuptools / breaks pip install -e . on Python 3.13+).
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "harmonize"

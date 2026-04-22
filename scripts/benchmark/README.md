@@ -6,6 +6,8 @@ This directory contains the **representation-level benchmark**: same tasks, same
 **Canonical results table:** `reports/benchmark_master/benchmark_results/comparison_summary.csv`  
 **Disconnect table:** `reports/benchmark_master/benchmark_results/disconnect_scores.csv`
 
+**End-to-end (data → matrices → this script):** [`docs/HOW_TO_RUN_EVERYTHING.md`](../../docs/HOW_TO_RUN_EVERYTHING.md)
+
 ---
 
 ## Quick start

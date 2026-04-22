@@ -13,7 +13,7 @@
 1. Branch from `main` with a short descriptive name (e.g. `fix/bridge-paths`, `feat/benchmark-metric`).
 2. Keep changes focused; avoid drive-by refactors unrelated to the issue.
 3. If you add R scripts under `scripts/benchmark/`, resolve the repo root via `harmonize_paths.R` (copy the preamble from an existing script in that folder).
-4. CI runs a check for `/Users/` under `scripts/`, `src/`, and `data/` code files.
+4. Before opening a PR, from repo root: **`python3 scripts/verify_repro_setup.py`** (use **`--require-data`** if you have matrices). CI runs **`verify_repro_setup.py --skip-r`** plus a scan for **`/Users/`** hardcoded paths under `scripts/`, `src/`, and `data/*.sh`.
 
 ## Issues
 

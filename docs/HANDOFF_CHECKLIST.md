@@ -2,13 +2,17 @@
 
 Use this when **cloning fresh**, **auditing reproducibility**, or **extending** the benchmark.
 
+**Single run guide:** **[`docs/HOW_TO_RUN_EVERYTHING.md`](HOW_TO_RUN_EVERYTHING.md)**.
+
 ## Reproduce benchmark outputs (given gene matrices exist)
 
+- [ ] Read **[`docs/HOW_TO_RUN_EVERYTHING.md`](HOW_TO_RUN_EVERYTHING.md)** (full pipeline) and **[`docs/CLEAN_CLONE_REPRODUCIBILITY.md`](CLEAN_CLONE_REPRODUCIBILITY.md)** (verify + commit policy).
 - [ ] Clone repository (`ProteomicsAllignment` directory name on disk).
-- [ ] Python **≥ 3.10**: `pip install -r requirements.txt` (optional `.venv/`).
+- [ ] Python **≥ 3.10**: `pip install -r requirements.txt` and **`pip install -e .`** (optional `.venv/`; aligns with `pyproject.toml`).
 - [ ] R **≥ 4.1**: `Rscript install_r_packages.R`.
+- [ ] Run **`python3 scripts/verify_repro_setup.py`** (add **`--require-data`** once matrices exist).
 - [ ] Confirm **`data/results/PDC000120/gene_matrix.csv`**, **`PDC000153`**, **`CCLE_corrected`** exist (large; see [`data/README.md`](../data/README.md) if missing).
-- [ ] `export PYTHONPATH="$PWD/src${PYTHONPATH:+:$PYTHONPATH}"`
+- [ ] `export PYTHONPATH="$PWD/src${PYTHONPATH:+:$PYTHONPATH}"` (not required if you only use `run_overnight_v2.sh`, which sets it).
 - [ ] Run `bash scripts/benchmark/run_overnight_v2.sh`
 - [ ] Inspect `reports/benchmark_master/benchmark_results/comparison_summary.csv`
 - [ ] Inspect `reports/benchmark_master/benchmark_results/disconnect_scores.csv`
@@ -31,8 +35,9 @@ Use this when **cloning fresh**, **auditing reproducibility**, or **extending** 
 
 ## Add a new benchmark task
 
-- [ ] Copy and edit `configs/tasks/*.yaml` for the new task.
-- [ ] Extend `scripts/run_preprocessing.py` / preprocessing YAML to emit union outputs.
+- [ ] Copy and edit `configs/tasks/*.yaml` for the new task (`task_name` must match the filename stem).
+- [ ] Extend **`scripts/run_preprocessing.py`** (task list and study selection) and **`src/harmonize/preprocessing/metadata.py`** (`build_sample_meta` only supports `breast_subtype` and `breast_vs_lung` today).
+- [ ] Extend **`scripts/benchmark/regenerate_methods_union.py`** (`TASKS` dict) for the overnight method matrices path.
 - [ ] Re-run overnight from **Step 1**.
 
 ## First files to open
