@@ -14,7 +14,8 @@ This directory contains the **representation-level benchmark**: same tasks, same
 
 ```bash
 # From repo root — full pipeline (permutations + split-half ceilings are SLOW; ~hours)
-bash scripts/benchmark/run_overnight_v2.sh
+bash scripts/run_benchmark.sh
+# same as: bash scripts/benchmark/run_overnight_v2.sh
 ```
 
 Logs: `reports/benchmark_master/logs/overnight_v2_*.log`  
