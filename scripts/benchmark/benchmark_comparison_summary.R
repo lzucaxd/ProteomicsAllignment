@@ -59,7 +59,7 @@ gm_bshift <- load_gm(file.path(REPO, "reports/benchmark_master/methods/bridge_aw
 gm_bscale <- load_gm(file.path(REPO, "reports/benchmark_master/methods/bridge_aware/bridge_aware_shift_scale_matrix.csv"))
 
 # ─── Metadata ────────────────────────────────────────────────────────────
-sm <- fread(file.path(REPO, "data/results/PDC000120/gene_matrix_subtype_mapping.csv"))
+sm <- fread(file.path(REPO, "data/annotations/cptac/PDC000120/gene_matrix_subtype_mapping.csv"))
 st_col <- if ("sample_type" %in% names(sm)) "sample_type" else "sample_type_if_available"
 
 gm_cols <- colnames(gm_breast)

@@ -80,7 +80,7 @@ cat("  Celligner:    ", ncol(gm_cell), "samples ×", nrow(gm_cell), "genes\n")
 cat("\nBuilding task metadata...\n")
 
 # ── Subtype metadata ─────────────────────────────────────────────────────
-sm <- fread(file.path(REPO, "data/results/PDC000120/gene_matrix_subtype_mapping.csv"))
+sm <- fread(file.path(REPO, "data/annotations/cptac/PDC000120/gene_matrix_subtype_mapping.csv"))
 st_col <- if ("sample_type" %in% names(sm)) "sample_type" else "sample_type_if_available"
 
 gm_cols <- colnames(gm_breast)

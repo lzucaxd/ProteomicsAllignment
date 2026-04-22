@@ -51,6 +51,14 @@ Conservative changes only; anything uncertain stays in place or goes to **`archi
 | **Added** | `docs/NAMING_AND_PATHS.md` | Single place: mental model, historical quirks, conventions for new files |
 | **Updated** | `README.md` (layout tree + link), `CONTRIBUTING.md`, `HANDOFF.md`, `REPO_LAYOUT_PLAN.md`, `docs/README.md`, `docs/DOC_LINK_CHECK.txt` | Point contributors at the map |
 
+## 2026-04-21 — Track annotation assets + CPTAC subtype mapping path
+
+| Action | Target | Reason |
+|--------|--------|--------|
+| **Added** | `data/annotations/` + `data/annotations/cptac/PDC000120/gene_matrix_subtype_mapping.csv` | Version **subtype / column mapping** outside gitignored `data/results/` |
+| **Updated** | `configs/preprocessing/*.yaml`, `configs/tasks/breast_subtype.yaml`, `src/harmonize/utils/paths.py`, R benchmark scripts, `build_PDC000120_subtype_mapping.py` | Point preprocessing at tracked mapping; script writes annotations + mirrors under `results/` when present |
+| **Added / tracked** | `data/biospecimen/*`, `data/biospecimen/README.md`, `data/ccle/README.md`, `data/cptac_samples/` study README | Push biospecimen + CCLE label provenance the user asked to share |
+
 ## Future (optional)
 
 - Refresh **`docs/REPO_AUDIT.md`** tree snapshot on a schedule or after refactors.

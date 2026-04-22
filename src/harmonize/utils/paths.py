@@ -52,7 +52,9 @@ class ProjectPaths:
 
     @property
     def subtype_mapping(self) -> Path:
-        return self.resolve("data/results/PDC000120/gene_matrix_subtype_mapping.csv")
+        return self.resolve(
+            "data/annotations/cptac/PDC000120/gene_matrix_subtype_mapping.csv"
+        )
 
     # ── Processed outputs ───────────────────────────────────────────
     @property

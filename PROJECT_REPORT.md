@@ -82,7 +82,7 @@ Study outputs live under **`data/results/PDC000120/`** (when generated). The fol
 
 **Inputs:** CPTAC clinical/biospecimen, bridge/sample mapping, `annotation_filled_corrected.csv`, `gene_matrix.csv`.
 
-**Outputs (examples):** `DA_sample_annotation.csv`, `DA_subtype_tumor_only.csv`, `DA_subtype_counts.csv`, `gene_matrix_subtype_mapping.csv`, `subtype_DA_recommendations.txt`, plus optional intermediate mapping tables when the full script is run.
+**Outputs (examples):** `DA_sample_annotation.csv`, `DA_subtype_tumor_only.csv`, `DA_subtype_counts.csv`, `gene_matrix_subtype_mapping.csv` (committed copy under **`data/annotations/cptac/PDC000120/`**; mirrored under `data/results/PDC000120/` when that folder exists), `subtype_DA_recommendations.txt`, plus optional intermediate mapping tables when the full script is run.
 
 **Goal:** One analysis-ready row per matrix column: **Tumor vs NAT** from biospecimen, **PAM50** for tumor-only subtype DA.
 

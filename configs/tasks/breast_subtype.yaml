@@ -32,7 +32,7 @@ expected_marker_directions:
 
 cptac:
   studies: [PDC000120]
-  subtype_mapping: data/results/PDC000120/gene_matrix_subtype_mapping.csv
+  subtype_mapping: data/annotations/cptac/PDC000120/gene_matrix_subtype_mapping.csv
   subset_strategy: mixture_balanced
   conditions:
     Luminal: [LumA, LumB]

@@ -8,14 +8,11 @@ Inputs (under data/ and results/PDC000120/):
   3) results/PDC000120/annotation_filled_corrected.csv
   4) results/PDC000120/gene_matrix.csv
 
-Outputs (all under results/PDC000120/):
-  - subtype_mapping_bridge_long.csv
-  - subtype_mapping_annotation_to_bridge.csv
-  - subtype_mapping_final.csv
-  - subtype_mapping_diagnostics.csv
-  - subtype_unmatched_samples.csv
-  - subtype_ambiguous_matches.csv
-  - gene_matrix_subtype_mapping.csv
+Outputs:
+  - gene_matrix_subtype_mapping.csv → data/annotations/cptac/PDC000120/ (tracked) and mirrored under results/PDC000120/ when that folder exists
+  - Other intermediates (local, under results/PDC000120/, gitignored): subtype_mapping_bridge_long.csv,
+    subtype_mapping_annotation_to_bridge.csv, subtype_mapping_final.csv, subtype_mapping_diagnostics.csv,
+    subtype_unmatched_samples.csv, subtype_ambiguous_matches.csv
   - PAM50_tumor_only_samples.csv
   - PAM50_subtype_counts.csv
   - subtype_DA_recommendations.txt
@@ -35,6 +32,8 @@ import pandas as pd
 DATA_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RES_DIR = os.path.join(DATA_DIR, "results", "PDC000120")
 os.makedirs(RES_DIR, exist_ok=True)
+ANN_PDC120_DIR = os.path.join(DATA_DIR, "annotations", "cptac", "PDC000120")
+os.makedirs(ANN_PDC120_DIR, exist_ok=True)
 
 
 # ---------------------------------------------------------------------------
@@ -491,9 +490,12 @@ def map_to_gene_matrix(matrix: pd.DataFrame, mapping_final: pd.DataFrame) -> pd.
     mf["sample_type_if_available"] = sample_types
 
     out = mf.copy()
-    out_path = os.path.join(RES_DIR, "gene_matrix_subtype_mapping.csv")
-    out.to_csv(out_path, index=False)
-    print(f"Saved gene-matrix subtype mapping to {out_path}")
+    out_path_ann = os.path.join(ANN_PDC120_DIR, "gene_matrix_subtype_mapping.csv")
+    out.to_csv(out_path_ann, index=False)
+    print(f"Saved gene-matrix subtype mapping to {out_path_ann} (tracked path for git)")
+    out_path_res = os.path.join(RES_DIR, "gene_matrix_subtype_mapping.csv")
+    out.to_csv(out_path_res, index=False)
+    print(f"Mirrored gene-matrix subtype mapping to {out_path_res}")
     return out
 
 

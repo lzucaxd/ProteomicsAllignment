@@ -66,6 +66,7 @@ When adding a **new** exploratory script, use **`scripts/exploratory/`** and men
 
 | I need… | Go to |
 |---------|--------|
+| Subtype / biospecimen / CCLE label tables (tracked) | [`../data/annotations/README.md`](../data/annotations/README.md), [`../data/biospecimen/README.md`](../data/biospecimen/README.md), [`../data/ccle/README.md`](../data/ccle/README.md) |
 | Install + verify | [`../environment/README.md`](../environment/README.md), `scripts/verify_repro_setup.py` |
 | Full run order | [`HOW_TO_RUN_EVERYTHING.md`](HOW_TO_RUN_EVERYTHING.md) |
 | Layout philosophy (no big moves) | [`../REPO_LAYOUT_PLAN.md`](../REPO_LAYOUT_PLAN.md) |

@@ -34,7 +34,7 @@ cat("  ", nrow(gm_cell), "genes ×", ncol(gm_cell), "samples\n")
 cell_meta <- fread(file.path(REPO, "reports/benchmark_master/celligner_all/sample_metadata.csv"))
 
 # ─── Load subtype and tissue subsets ────────────────────────────────────
-sm <- fread(file.path(REPO, "data/results/PDC000120/gene_matrix_subtype_mapping.csv"))
+sm <- fread(file.path(REPO, "data/annotations/cptac/PDC000120/gene_matrix_subtype_mapping.csv"))
 st_col <- if ("sample_type" %in% names(sm)) "sample_type" else "sample_type_if_available"
 gm_breast_cols <- colnames(fread(file.path(REPO, "data/results/PDC000120/gene_matrix.csv"), nrows = 0))
 gm_breast_cols <- setdiff(gm_breast_cols, c("GeneSymbol", "UniProtID"))

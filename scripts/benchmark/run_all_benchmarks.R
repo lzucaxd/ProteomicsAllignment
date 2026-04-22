@@ -7,7 +7,7 @@
 #     --cptac_breast  data/results/PDC000120/gene_matrix.csv \
 #     --cptac_lung    data/results/PDC000153/gene_matrix.csv \
 #     --ccle           data/results/CCLE_corrected/gene_matrix.csv \
-#     --subtype_map   data/results/PDC000120/gene_matrix_subtype_mapping.csv \
+#     --subtype_map   data/annotations/cptac/PDC000120/gene_matrix_subtype_mapping.csv \
 #     --ccle_sample   data/ccle_peptide/sample_info_ccle.csv \
 #     --outdir        reports/benchmark_master
 #     --subtype_union_meta  (optional) defaults to data/processed/union/sample_meta_breast_subtype.csv
@@ -28,7 +28,7 @@ parse_arg <- function(flag, default = NULL) {
 CPTAC_BREAST  <- parse_arg("--cptac_breast",  "data/results/PDC000120/gene_matrix.csv")
 CPTAC_LUNG    <- parse_arg("--cptac_lung",    "data/results/PDC000153/gene_matrix.csv")
 CCLE_MATRIX   <- parse_arg("--ccle",          "data/results/CCLE_corrected/gene_matrix.csv")
-SUBTYPE_MAP   <- parse_arg("--subtype_map",   "data/results/PDC000120/gene_matrix_subtype_mapping.csv")
+SUBTYPE_MAP   <- parse_arg("--subtype_map",   "data/annotations/cptac/PDC000120/gene_matrix_subtype_mapping.csv")
 CCLE_SAMPLE   <- parse_arg("--ccle_sample",   "data/ccle_peptide/sample_info_ccle.csv")
 OUTDIR        <- parse_arg("--outdir",        "reports/benchmark_master")
 SUBTYPE_UNION_META <- parse_arg("--subtype_union_meta", NA_character_)

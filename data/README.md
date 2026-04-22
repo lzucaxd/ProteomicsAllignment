@@ -15,6 +15,15 @@ Large downloads and intermediates are **gitignored** (see root `.gitignore`).
 
 **Note:** Some documentation refers to an idealized `data/pdc/PDC000120/` layout; in **this** repo, CPTAC raw downloads live under **`data/pdc_psm/`** (see [`PIPELINE_README.md`](PIPELINE_README.md)).
 
+## Curated annotations (tracked)
+
+| Location | Description |
+|----------|-------------|
+| **`data/annotations/`** | Small **subtype / sample-ID** tables used by configs (not large matrices). See [`annotations/README.md`](annotations/README.md). |
+| **`data/biospecimen/`** | CPTAC clinical / biospecimen exports for PDC000120 mapping. See [`biospecimen/README.md`](biospecimen/README.md). |
+| **`data/ccle/`** | CCLE label tables (e.g. breast subtype). See [`ccle/README.md`](ccle/README.md). |
+| **`data/cptac_samples/`** | Per-study notes and **local** `.sample.txt` paths (see each study `README.md`; large design files usually stay on mirror only). |
+
 ## Processed data (tracked selectively)
 
 | Location | Produced by | Description |

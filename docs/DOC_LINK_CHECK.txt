@@ -83,6 +83,16 @@ OK data/manifests/README.md
 OK data/manifests/EXPECTED_INPUTS.md
 OK data/manifests/example_pdc_file_manifest.csv
 
+## Annotation / biospecimen (tracked)
+OK data/annotations/README.md
+OK data/annotations/cptac/PDC000120/gene_matrix_subtype_mapping.csv
+OK data/biospecimen/README.md
+OK data/ccle/README.md
+OK data/ccle/ccle_breast_subtype_annotations_v2.csv
+OK data/cptac_samples/PDC000127/README.md
+OK data/processed/ccle_breast_subtype_annotation_processed.csv
+OK data/processed/ccle_breast_subtype_annotation_notes.txt
+
 ## Config paths
 OK configs/preprocessing/default.yaml
 OK configs/tasks/breast_subtype.yaml

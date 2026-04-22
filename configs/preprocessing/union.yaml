@@ -9,7 +9,7 @@ data_sources:
       tissue: Breast
       gene_matrix: data/results/PDC000120/gene_matrix.csv
       msstats_input: data/results/PDC000120/msstats_input.tsv
-      subtype_mapping: data/results/PDC000120/gene_matrix_subtype_mapping.csv
+      subtype_mapping: data/annotations/cptac/PDC000120/gene_matrix_subtype_mapping.csv
     PDC000153:
       tissue: Lung
       gene_matrix: data/results/PDC000153/gene_matrix.csv

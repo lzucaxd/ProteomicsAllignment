@@ -51,7 +51,8 @@ Detailed step-by-step documentation: **[data/PIPELINE_README.md](../data/PIPELIN
 
 The harmonization benchmark **does not** re-run PDC download or MSstatsTMT by default. It assumes:
 
-- `data/results/PDC000120/gene_matrix.csv` (and subtype mapping for mixture-balanced CPTAC subtype subsetting, where used).
+- `data/results/PDC000120/gene_matrix.csv` (large; local).
+- `data/annotations/cptac/PDC000120/gene_matrix_subtype_mapping.csv` (tracked; CPTAC subtype / column mapping for mixture-balanced subsetting).
 - `data/results/PDC000153/gene_matrix.csv` for lung.
 - `data/results/CCLE_corrected/gene_matrix.csv` for CCLE.
 - Optional: `data/ccle/ccle_breast_subtype_annotations_v2.csv` for **curated** Luminal/Basal/HER2 labels and column identifiers.
