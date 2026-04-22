@@ -1,11 +1,11 @@
 # Contributing
 
-**New to the repo (clone / GitHub):** read **[`START_HERE.md`](START_HERE.md)** first — data pipeline run order and benchmark entry points.
+**New to the repo:** read **[`MASTER.md`](MASTER.md)** first (single narrative). **`START_HERE.md`** is a one-click pointer to the same.
 
 ## Repository conventions
 
-- **Harmonization benchmark** entry points live under **`scripts/benchmark/`** (see [`docs/HOW_TO_RUN_EVERYTHING.md`](docs/HOW_TO_RUN_EVERYTHING.md)).
-- **New exploratory / study-specific** helpers → **`scripts/exploratory/`** (preferred). Legacy and slide-linked code remains under **`data/scripts/`** — see [`docs/NAMING_AND_PATHS.md`](docs/NAMING_AND_PATHS.md) for the full map (why paths look scattered and what not to duplicate).
+- **Harmonization benchmark** entry points live under **`scripts/benchmark/`** (see **[`MASTER.md`](MASTER.md)** §5 and [`docs/HOW_TO_RUN_EVERYTHING.md`](docs/HOW_TO_RUN_EVERYTHING.md) for extra command detail).
+- **New exploratory / study-specific** helpers → **`scripts/exploratory/`** (preferred). Old one-offs live in **`archive/data_scripts_legacy/`** (same basenames as former `data/scripts/`). **`data/scripts/`** keeps only the two **mapping** Python scripts — see [`data/scripts/README.md`](data/scripts/README.md). Path history: [`docs/NAMING_AND_PATHS.md`](docs/NAMING_AND_PATHS.md).
 - **No machine-specific absolute paths** in code under `scripts/`, `src/`, or portable shell under `data/*.sh`. Use:
   - **`PROTEOMICS_ALIGNMENT_ROOT`** for R scripts (see `scripts/benchmark/harmonize_paths.R`).
   - **`CPTAC_LOCAL_MIRROR`** for CPTAC `*.sample.txt` paths listed in `data/sample_files_msstats_tmt.csv` (see [docs/LAB_ONBOARDING.md](docs/LAB_ONBOARDING.md)).

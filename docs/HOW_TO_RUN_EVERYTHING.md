@@ -1,8 +1,8 @@
 # How to run everything
 
-**Cloning from git?** Read **[`../START_HERE.md`](../START_HERE.md)** first — it foregrounds the **data pipeline** (`PSM` → **`gene_matrix.csv`**) and points here for the full narrative. **How CPTAC / CCLE sample files become MSstatsTMT annotation:** **[`ANNOTATION_FROM_SAMPLES.md`](ANNOTATION_FROM_SAMPLES.md)**.
+**Read [`../MASTER.md`](../MASTER.md) first** — one narrative for the whole repo. **This file** is only a **command-level supplement** (copy-paste blocks, path tables). **Cloning:** [`../START_HERE.md`](../START_HERE.md) → `MASTER.md`. **Annotation story:** [`ANNOTATION_FROM_SAMPLES.md`](ANNOTATION_FROM_SAMPLES.md).
 
-**This is the single entry-point guide** for going from a **fresh clone** to **benchmark outputs**, including **where to point the pipeline at your files**. Deep design and methods live elsewhere (see [Documentation map](#documentation-map) at the end).
+For “what to read,” use **`MASTER.md` §7** instead of growing new doc lists here.
 
 | If you need… | Jump to |
 |--------------|---------|
@@ -13,13 +13,13 @@
 | Repo layout / naming (why things look scattered) | [`NAMING_AND_PATHS.md`](NAMING_AND_PATHS.md) |
 | Full benchmark after matrices exist | [Overnight benchmark](#4-harmonization-benchmark) |
 | Your paths / other studies (same matrix shape) | [Running on your own data](#6-running-on-your-own-data-paths) |
-| New task or new harmonization method | [HANDOFF_CHECKLIST.md](HANDOFF_CHECKLIST.md) · [config_system_overview.md](config_system_overview.md) |
+| New task or new harmonization method | [HANDOFF_CHECKLIST.md](HANDOFF_CHECKLIST.md) · [config_system_overview.md](archive/topic_notes/config_system_overview.md) |
 
 ---
 
 ## 0) What you are running (two layers)
 
-1. **Heavy CPTAC/CCLE acquisition and PSM → protein/gene matrices** — mostly under **`data/`** (see [`data/PIPELINE_README.md`](../data/PIPELINE_README.md)). **Front-door file map:** [`../pipeline/psm_to_gene_matrix/README.md`](../pipeline/psm_to_gene_matrix/README.md) — this is **not** the exploratory code under **`data/scripts/`** (see [`../data/scripts/README.md`](../data/scripts/README.md)).
+1. **Heavy CPTAC/CCLE acquisition and PSM → protein/gene matrices** — mostly under **`data/`** (see [`data/PIPELINE_README.md`](../data/PIPELINE_README.md)). **Front-door file map:** [`../pipeline/psm_to_gene_matrix/README.md`](../pipeline/psm_to_gene_matrix/README.md). Exploratory code: **`archive/data_scripts_legacy/`** (see [`../data/scripts/README.md`](../data/scripts/README.md)).
 2. **Harmonization benchmark** (shared gene space, methods, limma, nulls, ceilings, tables) — orchestrated by **`scripts/benchmark/run_overnight_v2.sh`** from the **repo root**.
 
 **Inference map:** MSstatsTMT builds CPTAC matrices; limma evaluates harmonized representations — **[`INFERENCE_BASELINES.md`](INFERENCE_BASELINES.md)**.
@@ -172,7 +172,7 @@ test -f reports/benchmark_master/benchmark_results/comparison_summary.csv && \
 
 ### Config reference
 
-- **[config_system_overview.md](config_system_overview.md)** — YAML layout and which runners read which files.
+- **[archive/topic_notes/config_system_overview.md](archive/topic_notes/config_system_overview.md)** — YAML layout and which runners read which files.
 
 ---
 
@@ -180,22 +180,11 @@ test -f reports/benchmark_master/benchmark_results/comparison_summary.csv && \
 
 | Doc | Role |
 |-----|------|
-| **This file** | **Single run guide** (you are here) |
-| [`README.md`](../README.md) | Repo home: question, findings, layout, full doc table |
-| [`CLEAN_CLONE_REPRODUCIBILITY.md`](CLEAN_CLONE_REPRODUCIBILITY.md) | Verify script, commit/Zenodo policy |
-| [`HANDOFF_CHECKLIST.md`](HANDOFF_CHECKLIST.md) | Lab checklist, extend methods/tasks |
-| [`LAB_ONBOARDING.md`](LAB_ONBOARDING.md) | Mirror paths, env vars |
-| [`data/PIPELINE_README.md`](../data/PIPELINE_README.md) | PDC → matrix pipeline (long form) |
-| [`../pipeline/psm_to_gene_matrix/README.md`](../pipeline/psm_to_gene_matrix/README.md) | Same pipeline — **entry-point table** (shell + R) |
-| [`ANNOTATION_FROM_SAMPLES.md`](ANNOTATION_FROM_SAMPLES.md) | **Sample files → MSstats annotation** (CPTAC + CCLE) |
-| [`INFERENCE_BASELINES.md`](INFERENCE_BASELINES.md) | MSstatsTMT vs limma — where each runs |
-| [`NAMING_AND_PATHS.md`](NAMING_AND_PATHS.md) | Why paths are scattered; naming rules for new files |
-| [`scripts/benchmark/README.md`](../scripts/benchmark/README.md) | Overnight steps 0–n |
-| [`METHODS.md`](METHODS.md) | Raw, bridge, Celligner definitions |
-| [`END_TO_END_TECHNICAL_REPORT.md`](END_TO_END_TECHNICAL_REPORT.md) | Paper-length narrative |
+| **This file** | Command-level runbook (supplement) |
+| **[`../MASTER.md`](../MASTER.md)** | **Canonical index** of every other doc (§7) |
 
 ---
 
 ## See also
 
-- **[`docs/README.md`](README.md)** — full index of topic notes and older reports.
+- **[`docs/README.md`](README.md)** — minimal index → **`MASTER.md`**.

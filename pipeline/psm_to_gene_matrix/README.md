@@ -1,6 +1,6 @@
 # PDC manifest → PSM → gene matrix (reproducible CPTAC/CCLE driver)
 
-This is the **lab handoff “front door”** for the heavy preprocessing stage. Implementations remain under **`data/`** (historical paths used by shell, R, and Python across the repo).
+This is the **lab handoff “front door”** for the heavy preprocessing stage. Implementations remain under **`data/`** (historical paths used by shell, R, and Python across the repo). **Whole-repo narrative:** **[`../../MASTER.md`](../../MASTER.md)**.
 
 ## Sample files → MSstatsTMT annotation (read this first)
 
@@ -36,7 +36,7 @@ Do not confuse **MSstats design** (above) with **benchmark subtype tables** in *
 
 ## What this is **not**
 
-- **`data/scripts/`** — exploratory subtype / v1 / one-off DA and QC (see **`data/scripts/README.md`**). Those files are **not** required to reproduce the main manifest → matrix → benchmark path.
+- **`data/scripts/`** — only two reproducible mapping scripts; older exploratory R/Python lives in **`../../archive/data_scripts_legacy/`** (see **`../../data/scripts/README.md`**). **Not** required for manifest → matrix → benchmark.
 - **`scripts/benchmark/`** — starts **after** `gene_matrix.csv` exist (union, methods, limma evaluation).
 
 ## MSstatsTMT vs limma (where inference happens)

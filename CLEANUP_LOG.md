@@ -80,6 +80,29 @@ Conservative changes only; anything uncertain stays in place or goes to **`archi
 | **Slimmed** | `START_HERE.md` §0, `pipeline/psm_to_gene_matrix/README.md` inputs section | Point to the new doc instead of duplicating tables |
 | **Updated** | `README.md`, `HANDOFF.md`, `docs/README.md`, `docs/HOW_TO_RUN_EVERYTHING.md`, `docs/NAMING_AND_PATHS.md`, `pipeline/README.md`, `data/ccle_peptide/README_CCLE.md`, `docs/DOC_LINK_CHECK.txt` | Cross-links + “small doc spine” line on README |
 
+## 2026-04-21 — MASTER.md + archive exploratory scripts & topic docs
+
+| Action | Target | Reason |
+|--------|--------|--------|
+| **Added** | Root **`MASTER.md`** | One narrative for clone → pipeline → benchmark + index of deep dives |
+| **Slimmed** | **`README.md`**, **`START_HERE.md`**, **`HANDOFF.md`**, **`docs/README.md`** | Point at **`MASTER.md`**; remove duplicate tables |
+| **`git mv`** | 41 files from **`data/scripts/`** → **`archive/data_scripts_legacy/`** | Tidying; **not** referenced by overnight benchmark or `src/` |
+| **Kept in** `data/scripts/` | **`build_PDC000120_subtype_mapping.py`**, **`build_cptac_basal_luminal_mixture_subset.py`**, **`README.md`** | Reproducible mapping / mixture subset |
+| **`git mv`** | 15 topic/index markdown files from **`docs/`** → **`docs/archive/topic_notes/`** | Reduce surface area; update links in HOW_TO_RUN, CLEAN_CLONE, INFERENCE_BASELINES, preprocessing/benchmark READMEs |
+| **Updated** | `PROJECT_REPORT.md` (paths), `CONTRIBUTING`, `scripts/README`, `pipeline/*`, `NAMING_AND_PATHS`, `archive/README`, `REPO_LAYOUT_PLAN`, `REPO_AUDIT`, `LAB_ONBOARDING`, `BENCHMARK_V2`, `data/README`, `scripts/exploratory/README` | Cross-links |
+
+## 2026-04-21 — Doc sprawl: single master + slim docs index
+
+| Action | Target | Reason |
+|--------|--------|--------|
+| **Updated** | `docs/README.md` | One pointer to `MASTER.md` + five deep dives only; archive links |
+| **Updated** | `docs/HOW_TO_RUN_EVERYTHING.md` intro | Explicitly a **supplement** to `MASTER.md`, not a second canonical guide |
+| **Updated** | `CONTRIBUTING.md` | Align with `archive/data_scripts_legacy/` + two scripts in `data/scripts/` |
+| **Updated** | `MASTER.md` §7 | “Doc policy” to discourage new parallel entry docs |
+| **Updated** | `REPO_LAYOUT_PLAN.md` | Note superseded for onboarding by `MASTER.md` |
+
+**Scripts:** exploratory `data/scripts/` tree was already moved to **`archive/data_scripts_legacy/`** (see `CLEANUP_LOG` + `archive/data_scripts_legacy/README.md`); no additional `git rm` in this pass to avoid breaking local `reports/*.md` that still cite old paths.
+
 ## Future (optional)
 
 - Refresh **`docs/REPO_AUDIT.md`** tree snapshot on a schedule or after refactors.
