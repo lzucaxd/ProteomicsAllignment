@@ -1,5 +1,7 @@
 # Pipeline index
 
+**Cloning from git?** Start at **[`../START_HERE.md`](../START_HERE.md)** — it highlights this data pipeline first, then the benchmark.
+
 | Pipeline | Front door |
 |----------|------------|
 | **PDC manifest → PSM download → MSstatsTMT → `gene_matrix.csv`** | [`psm_to_gene_matrix/README.md`](psm_to_gene_matrix/README.md) |

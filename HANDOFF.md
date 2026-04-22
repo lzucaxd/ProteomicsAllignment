@@ -1,5 +1,7 @@
 # Lab handoff — Proteomics alignment benchmark
 
+**Default entry from git / GitHub:** **[`START_HERE.md`](START_HERE.md)** (data pipeline + how to run + links here).
+
 **Audience:** A technically strong lab member who did not work on the repo day-to-day.
 
 ## What this project is

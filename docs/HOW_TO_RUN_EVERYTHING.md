@@ -1,5 +1,7 @@
 # How to run everything
 
+**Cloning from git?** Read **[`../START_HERE.md`](../START_HERE.md)** first — it foregrounds the **data pipeline** (`PSM` → **`gene_matrix.csv`**) and points here for the full narrative.
+
 **This is the single entry-point guide** for going from a **fresh clone** to **benchmark outputs**, including **where to point the pipeline at your files**. Deep design and methods live elsewhere (see [Documentation map](#documentation-map) at the end).
 
 | If you need… | Jump to |
@@ -7,6 +9,7 @@
 | Clone, install, verify, what to commit for papers | [Clean clone and checks](#1-clone-install-and-verify) · [CLEAN_CLONE_REPRODUCIBILITY.md](CLEAN_CLONE_REPRODUCIBILITY.md) |
 | PDC manifests → PSM → `gene_matrix.csv` (front-door table) | [`../pipeline/psm_to_gene_matrix/README.md`](../pipeline/psm_to_gene_matrix/README.md) · [PSM / MSstatsTMT preprocessing](#3-preprocessing--psm--gene_matrixcsv) |
 | MSstatsTMT vs limma (what runs where) | [`INFERENCE_BASELINES.md`](INFERENCE_BASELINES.md) |
+| Repo layout / naming (why things look scattered) | [`NAMING_AND_PATHS.md`](NAMING_AND_PATHS.md) |
 | Full benchmark after matrices exist | [Overnight benchmark](#4-harmonization-benchmark) |
 | Your paths / other studies (same matrix shape) | [Running on your own data](#6-running-on-your-own-data-paths) |
 | New task or new harmonization method | [HANDOFF_CHECKLIST.md](HANDOFF_CHECKLIST.md) · [config_system_overview.md](config_system_overview.md) |

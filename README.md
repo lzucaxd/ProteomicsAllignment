@@ -6,10 +6,21 @@
 
 ---
 
+## Cloning from git — read this first
+
+**Default entry (data pipeline + run order):** **[`START_HERE.md`](START_HERE.md)** — optimized for GitHub / first clone; leads with **how to run the data pipeline** (`PSM` → **`gene_matrix.csv`**) and where the scripts live.
+
+**Single end-to-end runbook:** [`docs/HOW_TO_RUN_EVERYTHING.md`](docs/HOW_TO_RUN_EVERYTHING.md).
+
+**Data pipeline file map (shell + R under `data/`):** [`pipeline/psm_to_gene_matrix/README.md`](pipeline/psm_to_gene_matrix/README.md).
+
+---
+
 ## Quick links
 
 | Goal | Document |
 |------|----------|
+| **First clone (start here)** | **[`START_HERE.md`](START_HERE.md)** |
 | **Run everything (clone → data → benchmark)** | [`docs/HOW_TO_RUN_EVERYTHING.md`](docs/HOW_TO_RUN_EVERYTHING.md) |
 | **Manifest → PSM → gene matrix (front door)** | [`pipeline/psm_to_gene_matrix/README.md`](pipeline/psm_to_gene_matrix/README.md) |
 | **MSstatsTMT (native TMT) vs limma (benchmark)** | [`docs/INFERENCE_BASELINES.md`](docs/INFERENCE_BASELINES.md) |
@@ -19,6 +30,7 @@
 | **Layout & clutter policy** | [`REPO_AUDIT.md`](REPO_AUDIT.md), [`REPO_LAYOUT_PLAN.md`](REPO_LAYOUT_PLAN.md) |
 | **Final tables / figures index** | [`reports/final_report/README.md`](reports/final_report/README.md) |
 | **What changed during cleanup** | [`CLEANUP_LOG.md`](CLEANUP_LOG.md) |
+| **Subtype / tissue annotations (tracked tables)** | [`data/annotations/README.md`](data/annotations/README.md) |
 
 ---
 
@@ -40,7 +52,7 @@ scripts/
 reports/
   benchmark_master/    Numerical outputs live here (name says “reports”; treat as results/)
   final_report/        Curated index + figure manifest
-docs/                  Technical reports; start at docs/NAMING_AND_PATHS.md if lost
+docs/                  Technical reports; see START_HERE.md then HOW_TO_RUN_EVERYTHING.md
 notebooks/exploratory/ Non-pipeline notebooks
 archive/               Legacy duplicates (see archive/README.md)
 environment/           Setup instructions
@@ -61,11 +73,13 @@ Details and optional Celligner: **`environment/README.md`**.
 
 ---
 
-## Run the main pipeline
+## Data pipeline and benchmark (how to run)
 
-1. **Inputs:** PDC manifests + CPTAC `.sample.txt` paths + CCLE matrices — **`data/manifests/README.md`**, **`data/manifests/EXPECTED_INPUTS.md`**, **`data/PIPELINE_README.md`**.
-2. **PSM → `gene_matrix.csv`:** from `data/`: `./run_pipeline_per_manifest.sh` (or `./run_batch_studies.sh` with `CPTAC_LOCAL_MIRROR`).
-3. **Benchmark:** from repo root: **`bash scripts/run_benchmark.sh`** (hours; slow steps documented in `scripts/benchmark/README.md`).
+**Same content, more detail:** **[`START_HERE.md`](START_HERE.md)** and **[`pipeline/psm_to_gene_matrix/README.md`](pipeline/psm_to_gene_matrix/README.md)**.
+
+1. **Inputs:** PDC manifests + CPTAC `.sample.txt` paths + CCLE matrices — **`data/manifests/README.md`**, **`data/manifests/EXPECTED_INPUTS.md`**, **`data/PIPELINE_README.md`** (deep dive).
+2. **Data pipeline — PSM → `gene_matrix.csv`:** run from **`data/`**: `./run_pipeline_per_manifest.sh` or `./run_batch_studies.sh` (often needs **`CPTAC_LOCAL_MIRROR`**; see **`docs/LAB_ONBOARDING.md`**). Driver table: **`pipeline/psm_to_gene_matrix/README.md`**.
+3. **Benchmark (after matrices exist):** from repo root: **`bash scripts/run_benchmark.sh`** (hours; steps in **`scripts/benchmark/README.md`**).
 
 **Primary outputs:** `reports/benchmark_master/benchmark_results/comparison_summary.csv`, `disconnect_scores.csv`. **Index:** `reports/final_report/README.md`.
 

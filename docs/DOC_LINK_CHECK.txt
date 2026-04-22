@@ -105,6 +105,7 @@ OK reports/final_report/README.md
 OK reports/final_report/FIGURE_MANIFEST.md
 OK environment/README.md
 OK HANDOFF.md
+OK START_HERE.md
 OK HANDOFF_SANITY_CHECK.md
 OK REPO_AUDIT.md
 OK REPO_LAYOUT_PLAN.md

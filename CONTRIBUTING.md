@@ -1,5 +1,7 @@
 # Contributing
 
+**New to the repo (clone / GitHub):** read **[`START_HERE.md`](START_HERE.md)** first — data pipeline run order and benchmark entry points.
+
 ## Repository conventions
 
 - **Harmonization benchmark** entry points live under **`scripts/benchmark/`** (see [`docs/HOW_TO_RUN_EVERYTHING.md`](docs/HOW_TO_RUN_EVERYTHING.md)).
