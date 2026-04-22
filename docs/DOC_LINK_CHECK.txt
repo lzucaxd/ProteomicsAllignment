@@ -75,8 +75,12 @@ OK scripts/run_methods.py
 OK scripts/run_native_baselines.py
 OK scripts/run_preprocessing.py
 OK scripts/verify_repro_setup.py
+OK scripts/run_benchmark.sh
+OK scripts/run_diagnostics.sh
+OK scripts/run_methods.sh
 
 OK data/manifests/README.md
+OK data/manifests/EXPECTED_INPUTS.md
 OK data/manifests/example_pdc_file_manifest.csv
 
 ## Config paths
@@ -87,3 +91,12 @@ OK configs/tasks/breast_vs_lung.yaml
 ## Key benchmark outputs
 OK reports/benchmark_master/benchmark_results/comparison_summary.csv
 OK reports/benchmark_master/benchmark_results/disconnect_scores.csv
+OK reports/final_report/README.md
+OK reports/final_report/FIGURE_MANIFEST.md
+OK environment/README.md
+OK HANDOFF.md
+OK HANDOFF_SANITY_CHECK.md
+OK REPO_AUDIT.md
+OK REPO_LAYOUT_PLAN.md
+OK CLEANUP_LOG.md
+OK scripts/README_RUNNERS.md

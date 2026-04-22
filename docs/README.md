@@ -4,6 +4,11 @@
 
 | Doc | Use when you need… |
 |-----|---------------------|
+| **[../HANDOFF.md](../HANDOFF.md)** | New teammate: project scope, outputs, caveats (repo root). |
+| **[../HANDOFF_SANITY_CHECK.md](../HANDOFF_SANITY_CHECK.md)** | Verified vs manual follow-ups. |
+| **[../REPO_AUDIT.md](../REPO_AUDIT.md)** | High-level layout + ignore/archive policy (repo root). |
+| **[../REPO_LAYOUT_PLAN.md](../REPO_LAYOUT_PLAN.md)** | Why physical layout stayed conservative. |
+| **[../CLEANUP_LOG.md](../CLEANUP_LOG.md)** | What moved during handoff cleanup. |
 | **[HOW_TO_RUN_EVERYTHING.md](HOW_TO_RUN_EVERYTHING.md)** | **Run the full pipeline:** data → matrices → benchmark → custom paths. |
 | **[CLEAN_CLONE_REPRODUCIBILITY.md](CLEAN_CLONE_REPRODUCIBILITY.md)** | Fresh clone: verify script, data policy, what to commit for papers. |
 | **[HANDOFF_CHECKLIST.md](HANDOFF_CHECKLIST.md)** | Lab pickup: reproduce, extend methods/tasks, path checks. |

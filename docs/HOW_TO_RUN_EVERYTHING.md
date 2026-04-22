@@ -118,7 +118,8 @@ From **repository root** (after §3 matrices exist):
 
 ```bash
 export PYTHONPATH="${PWD}/src${PYTHONPATH:+:$PYTHONPATH}"   # optional if using the shell script alone
-bash scripts/benchmark/run_overnight_v2.sh
+bash scripts/run_benchmark.sh
+# equivalent: bash scripts/benchmark/run_overnight_v2.sh
 ```
 
 This runs annotation prep, union matrices, methods, limma DA, cross-domain metrics, permutations, ceilings, calibration, and assembly. **Steps involving permutations/ceilings can take hours.** Step-by-step reference: **[`scripts/benchmark/README.md`](../scripts/benchmark/README.md)**.

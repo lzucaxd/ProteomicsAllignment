@@ -30,4 +30,5 @@ python3 check_manifests.py
 python3 check_studies_sample_file.py
 ```
 
-Full pipeline: **[`../PIPELINE_README.md`](../PIPELINE_README.md)**.
+Full pipeline: **[`../PIPELINE_README.md`](../PIPELINE_README.md)**.  
+Expected inputs checklist: **[`EXPECTED_INPUTS.md`](EXPECTED_INPUTS.md)**.

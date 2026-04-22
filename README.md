@@ -1,93 +1,92 @@
 # Proteomics alignment benchmark
 
-**A calibrated benchmark** for evaluating **cross-dataset harmonization** of clinical (**CPTAC**) and preclinical (**CCLE**) TMT proteomics on a **shared gene space**, with explicit **null** and **ceiling** calibration.
+**CPTAC ↔ CCLE TMT proteomics** — a calibrated benchmark on a **shared gene space** with explicit **null** and **ceiling** calibration. The repo evaluates whether harmonization improves **cross-domain fold-change agreement** or mainly **PCA geometry**.
 
-> **Folder name:** the repository directory is spelled `ProteomicsAllignment` on disk (historical); documentation uses “alignment” in prose.
-
-> **Run the full pipeline (start here):** **[`docs/HOW_TO_RUN_EVERYTHING.md`](docs/HOW_TO_RUN_EVERYTHING.md)** — single guide for data, install, PSM → `gene_matrix.csv`, overnight benchmark, optional tables/slides, and **custom paths / your own matrices**.
-
-## The question
-
-When we harmonize tumor and cell-line proteomes, do we improve **per-gene fold-change agreement** across domains, or mainly improve **PCA geometry**?
-
-## The finding (illustrative numbers)
-
-On **breast vs lung**, **raw** domain separation on PC1 is extreme (**domain R² ≈ 0.98**), while **Celligner** drives that toward mixing (**domain R² ≈ 0.003**) yet can **invert** cross-domain FC correlation for the same genes (see `comparison_summary.csv` and `disconnect_scores.csv`). **Bridge shift** preserves CPTAC–CCLE FC correlation for subtype while reducing domain dominance on PCs; see **`docs/METHODS.md`** for definitions.
+> **Folder name:** the directory is spelled `ProteomicsAllignment` on disk (historical).
 
 ---
 
-## Running everything (end-to-end)
+## Quick links
 
-**Full walkthrough (single page):** **[`docs/HOW_TO_RUN_EVERYTHING.md`](docs/HOW_TO_RUN_EVERYTHING.md)** — data acquisition, install, verify, PSM → `gene_matrix.csv`, **`run_overnight_v2.sh`**, optional tables/figures, and **pointing configs at your matrices**.
+| Goal | Document |
+|------|----------|
+| **Run everything (clone → data → benchmark)** | [`docs/HOW_TO_RUN_EVERYTHING.md`](docs/HOW_TO_RUN_EVERYTHING.md) |
+| **Lab handoff (new teammate)** | [`HANDOFF.md`](HANDOFF.md) |
+| **Environment (Python + R)** | [`environment/README.md`](environment/README.md) |
+| **Layout & clutter policy** | [`REPO_AUDIT.md`](REPO_AUDIT.md), [`REPO_LAYOUT_PLAN.md`](REPO_LAYOUT_PLAN.md) |
+| **Final tables / figures index** | [`reports/final_report/README.md`](reports/final_report/README.md) |
+| **What changed during cleanup** | [`CLEANUP_LOG.md`](CLEANUP_LOG.md) |
 
-**Minimal path** (after manifests, `sample_files_msstats_tmt.csv`, and a venv with `pip install -r requirements.txt` + **`pip install -e .`**):
+---
+
+## Repository layout
+
+```
+configs/              YAML: preprocessing, tasks, methods, benchmark toggles
+src/harmonize/        Python package (preprocessing, benchmark helpers, methods registry)
+data/                 CPTAC/CCLE drivers: PSM download, MSstatsTMT R, manifests (see data/README.md)
+scripts/
+  benchmark/          run_overnight_v2.sh (implementation), metrics, calibration R
+  preprocessing/    Documentation index (executables still under data/)
+  run_benchmark.sh    Stable entry → overnight v2
+  run_diagnostics.sh  Preflight + structure subset
+  run_methods.sh      Python method smoke test
+reports/
+  benchmark_master/   CSV outputs, diagnostics, final_tables/
+  final_report/       Index README + figure manifest (no duplicate large assets)
+docs/                 Technical reports, methods, reproducibility guides
+notebooks/exploratory/ Non-pipeline notebooks
+archive/              Legacy duplicates (see archive/README.md)
+environment/          Setup instructions
+```
+
+---
+
+## Setup (short)
 
 ```bash
-cd /your/actual/path/ProteomicsAllignment
-source .venv/bin/activate
-cd data && ./run_pipeline_per_manifest.sh    # or ./run_batch_studies.sh with CPTAC_LOCAL_MIRROR
-cd .. && bash scripts/benchmark/run_overnight_v2.sh
+python3 -m venv .venv && source .venv/bin/activate
+pip install -U pip && pip install -r requirements.txt && pip install -e .
+Rscript install_r_packages.R
+python3 scripts/verify_repro_setup.py
 ```
 
-Use your real clone path, not a placeholder like `/path/to/ProteomicsAllignment`. Repro checks and commit policy: **`docs/CLEAN_CLONE_REPRODUCIBILITY.md`**.
+Details and optional Celligner: **`environment/README.md`**.
 
 ---
 
-## Methods evaluated (benchmark)
+## Run the main pipeline
 
-| Repo ID | Plot label | Role |
-|---------|--------------|------|
-| `raw` | Raw | No correction |
-| `bridge_shift` | Bridge shift | Per-gene offset from **bridge channel** summaries in `msstats_input.tsv` (Norm rows); **not** domain medians of sample abundances |
-| `bridge_scale` | Bridge shift+scale | Bridge medians + **MAD**-based rescaling |
-| `celligner` | Celligner | cPCA + MNN in PC space; **no per-gene preservation guarantee** |
+1. **Inputs:** PDC manifests + CPTAC `.sample.txt` paths + CCLE matrices — **`data/manifests/README.md`**, **`data/manifests/EXPECTED_INPUTS.md`**, **`data/PIPELINE_README.md`**.
+2. **PSM → `gene_matrix.csv`:** from `data/`: `./run_pipeline_per_manifest.sh` (or `./run_batch_studies.sh` with `CPTAC_LOCAL_MIRROR`).
+3. **Benchmark:** from repo root: **`bash scripts/run_benchmark.sh`** (hours; slow steps documented in `scripts/benchmark/README.md`).
 
----
-
-## Repository layout (abbrev.)
-
-```
-configs/                 # YAML: preprocessing, tasks, methods
-data/                    # Raw + MSstatsTMT outputs (mostly gitignored) + processed union
-scripts/
-  preprocessing/       # Docs index; executables still under data/ (see below)
-  benchmark/             # run_overnight_v2.sh + metrics + calibration
-  methods/               # Method drivers (Celligner, bridge-aware R, …)
-  presentation/          # Figures / slide exports
-src/harmonize/           # Python package (preprocessing + benchmark helpers)
-reports/benchmark_master/# Results, diagnostics, meeting figures, final_tables/
-docs/                    # Design + handoff + audit
-```
-
-**Preprocessing executables** (`run_pipeline_per_manifest.sh`, `pdc_manifest_downloader.py`, `pdc_psm_to_msstatsTMT_protein_matrix.R`, …) live under **`data/`** today; see **`scripts/preprocessing/README.md`** for the map.
+**Primary outputs:** `reports/benchmark_master/benchmark_results/comparison_summary.csv`, `disconnect_scores.csv`. **Index:** `reports/final_report/README.md`.
 
 ---
 
-## Documentation map
+## Data policy
 
-| Doc | Audience |
-|-----|----------|
-| **`docs/HOW_TO_RUN_EVERYTHING.md`** | **Central run guide:** clone → data → matrices → benchmark → custom paths |
-| **`data/PIPELINE_README.md`** | PDC manifest → download → MSstatsTMT → `gene_matrix.csv` (authoritative) |
-| **`data/manifests/README.md`** | Where to get PDC manifests (PSM / Text); what to save locally |
-| **`docs/LAB_ONBOARDING.md`** | `CPTAC_LOCAL_MIRROR`, clone layout, env vars |
-| **`scripts/preprocessing/README.md`** | Preprocessing narrative + path map |
-| **`scripts/benchmark/README.md`** | Overnight benchmark steps 0–12 |
-| **`data/README.md`** | What lives under `data/`, regeneration |
-| **`docs/METHODS.md`** | Raw, bridge shift, bridge shift+scale, Celligner |
-| **`docs/END_TO_END_TECHNICAL_REPORT.md`** | Paper-style full narrative |
-| **`docs/BENCHMARK_V2_AND_PRESENTATION.md`** | Slides + paths checklist |
-| **`docs/CLEAN_CLONE_REPRODUCIBILITY.md`** | Clone → install → verify → run (canonical) |
-| **`docs/HANDOFF_CHECKLIST.md`** | Lab reproduction checklist |
-| **`docs/REPO_AUDIT.md`** | Machine-generated tree snapshot |
-| **`PROJECT_REPORT.md`** | Inventory-style overview |
-| **`CONTRIBUTING.md`** | Conventions |
+Large and expiring artifacts are **gitignored** (PSM downloads, `gene_matrix.csv` trees, dated PDC manifests, presentation bundles). The repo stays **small and cloneable**; you attach data locally or via shared storage. See **`.gitignore`** and **`docs/CLEAN_CLONE_REPRODUCIBILITY.md`**.
 
 ---
 
-## What not to commit
+## Methods compared
 
-Large downloads (`data/pdc_psm/`, `data/results/`, …), **dated PDC manifest CSVs** (expiring URLs), `.venv/`, and local mirrors are **gitignored** (see root `.gitignore`). The repo keeps **`data/manifests/README.md`** and **`example_pdc_file_manifest.csv`** only. Regenerated benchmark CSVs under `reports/benchmark_master/` are a **team policy** choice.
+| ID | Role |
+|----|------|
+| `raw` | Baseline |
+| `bridge_shift` | Bridge-channel offset |
+| `bridge_scale` | Bridge offset + MAD scale |
+| `celligner` | cPCA + MNN |
+
+**Definitions:** [`docs/METHODS.md`](docs/METHODS.md).
+
+---
+
+## Project status
+
+**Active research codebase** — benchmark v2 shell path is primary; some legacy Python drivers remain for debugging. **Sanity checklist after refactors:** [`HANDOFF_SANITY_CHECK.md`](HANDOFF_SANITY_CHECK.md).
 
 ---
 
@@ -97,4 +96,4 @@ Zamfira, L.-A. (2025–2026). *A calibrated benchmark for cross-dataset harmoniz
 
 ## License
 
-See [`LICENSE`](LICENSE) (MIT).
+[`LICENSE`](LICENSE) (MIT).

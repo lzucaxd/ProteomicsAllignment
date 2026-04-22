@@ -1,6 +1,8 @@
-# OS
+# OS / editors
 .DS_Store
 Thumbs.db
+*.swp
+*~
 
 # Python
 .venv/

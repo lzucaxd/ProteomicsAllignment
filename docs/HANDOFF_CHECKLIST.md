@@ -2,6 +2,7 @@
 
 Use this when **cloning fresh**, **auditing reproducibility**, or **extending** the benchmark.
 
+**Narrative handoff (start here for people):** **[`../HANDOFF.md`](../HANDOFF.md)**.  
 **Single run guide:** **[`docs/HOW_TO_RUN_EVERYTHING.md`](HOW_TO_RUN_EVERYTHING.md)**.
 
 ## Reproduce benchmark outputs (given gene matrices exist)
