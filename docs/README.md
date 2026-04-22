@@ -8,6 +8,7 @@
 | **[../HANDOFF_SANITY_CHECK.md](../HANDOFF_SANITY_CHECK.md)** | Verified vs manual follow-ups. |
 | **[../REPO_AUDIT.md](../REPO_AUDIT.md)** | High-level layout + ignore/archive policy (repo root). |
 | **[../REPO_LAYOUT_PLAN.md](../REPO_LAYOUT_PLAN.md)** | Why physical layout stayed conservative. |
+| **[NAMING_AND_PATHS.md](NAMING_AND_PATHS.md)** | **Scattered paths explained** + naming conventions for new code. |
 | **[../CLEANUP_LOG.md](../CLEANUP_LOG.md)** | What moved during handoff cleanup. |
 | **[HOW_TO_RUN_EVERYTHING.md](HOW_TO_RUN_EVERYTHING.md)** | **Run the full pipeline:** data → matrices → benchmark → custom paths. |
 | **[INFERENCE_BASELINES.md](INFERENCE_BASELINES.md)** | **MSstatsTMT (TMT native) vs limma** — matrix build vs benchmark DA. |

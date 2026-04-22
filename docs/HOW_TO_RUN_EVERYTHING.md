@@ -183,6 +183,7 @@ test -f reports/benchmark_master/benchmark_results/comparison_summary.csv && \
 | [`data/PIPELINE_README.md`](../data/PIPELINE_README.md) | PDC → matrix pipeline (long form) |
 | [`../pipeline/psm_to_gene_matrix/README.md`](../pipeline/psm_to_gene_matrix/README.md) | Same pipeline — **entry-point table** (shell + R) |
 | [`INFERENCE_BASELINES.md`](INFERENCE_BASELINES.md) | MSstatsTMT vs limma — where each runs |
+| [`NAMING_AND_PATHS.md`](NAMING_AND_PATHS.md) | Why paths are scattered; naming rules for new files |
 | [`scripts/benchmark/README.md`](../scripts/benchmark/README.md) | Overnight steps 0–n |
 | [`METHODS.md`](METHODS.md) | Raw, bridge, Celligner definitions |
 | [`END_TO_END_TECHNICAL_REPORT.md`](END_TO_END_TECHNICAL_REPORT.md) | Paper-length narrative |

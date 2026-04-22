@@ -15,6 +15,7 @@
 | **MSstatsTMT (native TMT) vs limma (benchmark)** | [`docs/INFERENCE_BASELINES.md`](docs/INFERENCE_BASELINES.md) |
 | **Lab handoff (new teammate)** | [`HANDOFF.md`](HANDOFF.md) |
 | **Environment (Python + R)** | [`environment/README.md`](environment/README.md) |
+| **Why paths look scattered + naming rules** | [`docs/NAMING_AND_PATHS.md`](docs/NAMING_AND_PATHS.md) |
 | **Layout & clutter policy** | [`REPO_AUDIT.md`](REPO_AUDIT.md), [`REPO_LAYOUT_PLAN.md`](REPO_LAYOUT_PLAN.md) |
 | **Final tables / figures index** | [`reports/final_report/README.md`](reports/final_report/README.md) |
 | **What changed during cleanup** | [`CLEANUP_LOG.md`](CLEANUP_LOG.md) |
@@ -24,24 +25,25 @@
 ## Repository layout
 
 ```
-configs/              YAML: preprocessing, tasks, methods, benchmark toggles
-src/harmonize/        Python package (preprocessing, benchmark helpers, methods registry)
-pipeline/             Doc-only index: PSM→matrix front door (see pipeline/psm_to_gene_matrix/)
-data/                 CPTAC/CCLE drivers: PSM download, MSstatsTMT R, manifests (see data/README.md)
+configs/               YAML: preprocessing, tasks, methods, benchmark toggles
+src/harmonize/         Python package (preprocessing, benchmark helpers, methods registry)
+pipeline/              Doc-only: PSM→matrix front door (executables still under data/)
+data/                  Stage-1 CPTAC/CCLE: PSM download, MSstatsTMT R, manifests (see data/README.md)
+  scripts/             Legacy exploratory R/py (not the manifest→matrix driver)
 scripts/
-  benchmark/          run_overnight_v2.sh (implementation), metrics, calibration R
-  exploratory/        Preferred home for new one-offs (not data/scripts/)
-  preprocessing/    Documentation index (executables still under data/)
-  run_benchmark.sh    Stable entry → overnight v2
-  run_diagnostics.sh  Preflight + structure subset
-  run_methods.sh      Python method smoke test
+  benchmark/           Stage-2: run_overnight_v2.sh, limma, metrics, calibration R
+  exploratory/         Preferred home for new one-offs
+  preprocessing/       Doc index only; drivers live under data/
+  run_benchmark.sh     Stable entry → overnight v2
+  run_diagnostics.sh   Preflight + structure subset
+  run_methods.sh       Python method smoke test
 reports/
-  benchmark_master/   CSV outputs, diagnostics, final_tables/
-  final_report/       Index README + figure manifest (no duplicate large assets)
-docs/                 Technical reports, methods, reproducibility guides
+  benchmark_master/    Numerical outputs live here (name says “reports”; treat as results/)
+  final_report/        Curated index + figure manifest
+docs/                  Technical reports; start at docs/NAMING_AND_PATHS.md if lost
 notebooks/exploratory/ Non-pipeline notebooks
-archive/              Legacy duplicates (see archive/README.md)
-environment/          Setup instructions
+archive/               Legacy duplicates (see archive/README.md)
+environment/           Setup instructions
 ```
 
 ---

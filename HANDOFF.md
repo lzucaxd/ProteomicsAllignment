@@ -55,7 +55,8 @@ Definitions: **`docs/METHODS.md`**.
 5. **`data/PIPELINE_README.md`** (manifest → matrix — long form)
 6. **`scripts/benchmark/README.md`** (overnight steps)
 7. **`docs/METHODS.md`**
-8. **`REPO_AUDIT.md`** + **`REPO_LAYOUT_PLAN.md`** (layout and clutter policy)
+8. **`docs/NAMING_AND_PATHS.md`** (why `data/` vs `scripts/` vs `reports/`; naming for new files)
+9. **`REPO_AUDIT.md`** + **`REPO_LAYOUT_PLAN.md`** (layout and clutter policy)
 
 ## Data and reproducibility
 

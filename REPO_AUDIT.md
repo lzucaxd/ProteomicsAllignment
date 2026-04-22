@@ -46,6 +46,7 @@
 - **`docs/HOW_TO_RUN_EVERYTHING.md`** — single run guide
 - **`docs/INFERENCE_BASELINES.md`** — MSstatsTMT vs limma
 - **`pipeline/psm_to_gene_matrix/README.md`** — manifest → matrix entry table
+- **`docs/NAMING_AND_PATHS.md`** — scattered layout explained; conventions for new contributions
 - **`scripts/benchmark/run_overnight_v2.sh`** — canonical full benchmark
 - **`configs/preprocessing/default.yaml`**, **`configs/tasks/*.yaml`**
 - **`data/PIPELINE_README.md`**, **`data/manifests/README.md`**, **`data/sample_files_msstats_tmt.csv`** (registry)

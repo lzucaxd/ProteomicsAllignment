@@ -1,5 +1,7 @@
 # Repository layout plan
 
+**Navigation:** for a contributor-facing map of historical vs canonical paths and **naming rules for new files**, see **[`docs/NAMING_AND_PATHS.md`](docs/NAMING_AND_PATHS.md)**.
+
 ## Principles (handoff)
 
 - **Code** (`src/`, `scripts/`) stays separate from **large generated data** (`data/results/`, `data/pdc_psm/`) and **presentation exports** (`presentation_materials/`).

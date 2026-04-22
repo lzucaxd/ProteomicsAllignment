@@ -108,3 +108,4 @@ OK pipeline/psm_to_gene_matrix/README.md
 OK data/scripts/README.md
 OK scripts/exploratory/README.md
 OK docs/INFERENCE_BASELINES.md
+OK docs/NAMING_AND_PATHS.md
