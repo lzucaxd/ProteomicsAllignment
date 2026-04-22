@@ -21,7 +21,13 @@ PSM_ROOT = DATA_DIR / "pdc_psm"
 
 def get_study_ids_from_manifests(manifests_dir: Path) -> set:
     studies = set()
-    for path in sorted(manifests_dir.glob("PDC_file_manifest_*.csv")):
+    paths = sorted(
+        set(manifests_dir.glob("PDC_file_manifest_*.csv"))
+        | set(manifests_dir.glob("PDC*_pdc_file_manifest.csv"))
+    )
+    for path in paths:
+        if path.name == "example_pdc_file_manifest.csv":
+            continue
         with open(path, newline="", encoding="utf-8", errors="replace") as f:
             r = csv.DictReader(f)
             for row in r:

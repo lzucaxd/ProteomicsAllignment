@@ -115,8 +115,11 @@ Each study gets its **own** outputs under `results/{study_id}/` and its **own** 
 
 ```
 .
-├── manifests/                          # PDC file manifest CSVs (one per study)
-│   └── PDC_file_manifest_*.csv
+├── manifests/                          # PDC file manifest CSVs (local; see manifests/README.md)
+│   ├── README.md                       # How to export from PDC (PSM / Text)
+│   ├── example_pdc_file_manifest.csv # Column layout only (placeholder URLs)
+│   ├── PDC_file_manifest_*.csv         # Typical PDC export names (gitignored)
+│   └── PDC*_pdc_file_manifest.csv      # Recommended per-study names (gitignored)
 ├── sample_files_msstats_tmt.csv        # Registry: study_id → path to .sample.txt, format, reference_channel
 ├── pdc_psm/                            # Downloaded PSM files (created by pipeline)
 │   └── {study_id}/
@@ -156,7 +159,8 @@ Each study gets its **own** outputs under `results/{study_id}/` and its **own** 
 
 ### 1. Manifests (`manifests/`)
 
-- PDC file manifest CSVs downloaded from the [PDC portal](https://pdc.cancer.gov/).
+- PDC file manifest CSVs downloaded from the [PDC portal](https://pdc.cancer.gov/). **Do not commit** dated exports: download links **expire**. The repo keeps **`manifests/README.md`** (how to export) and **`example_pdc_file_manifest.csv`** (column shape only).
+- Save exports locally as `PDC_file_manifest_*.csv` (portal default) or `PDC000153_pdc_file_manifest.csv` (recommended per-study name; see README in this folder).
 - Each file should contain **one study** (one “PDC Study ID” value).
 - Required columns include: **File Name**, **PDC Study ID**, **Data Category**, **File Download Link**.
 
@@ -184,7 +188,7 @@ From the pipeline root (where `run_pipeline_per_manifest.sh` lives):
 
 This script:
 
-1. Loops over every `manifests/PDC_file_manifest_*.csv`.
+1. Loops over every `manifests/PDC_file_manifest_*.csv` and `manifests/PDC*_pdc_file_manifest.csv` (skips `example_pdc_file_manifest.csv`).
 2. Extracts **PDC Study ID** from each.
 3. **Downloads** PSM files (`.psm` only) into `pdc_psm/{study_id}/`.
 4. **Checks** that the study appears in `sample_files_msstats_tmt.csv` (warns if not).
@@ -211,7 +215,7 @@ With `--cleanup-after`, once a study's `gene_matrix.csv` is written, the script 
 ```bash
 # 1. Download (one manifest)
 python3 pdc_manifest_downloader.py \
-  --manifest manifests/PDC_file_manifest_03142026_145054.csv \
+  --manifest manifests/PDC000153_pdc_file_manifest.csv \
   --outdir pdc_psm \
   --include-category "Peptide Spectral Matches" \
   --ext .psm

@@ -1,0 +1,3 @@
+File ID,File Name,Run Metadata ID,Protocol,Study Name,PDC Study ID,PDC Study Version,Study ID,Project Name,Data Category,File Type,Access,File Size (in bytes),Md5sum,Downloadable,File Download Link
+example-id-001,EXAMPLE_LUAD_f01.psm,EXAMPLE_RUN_ID,P-S046-1,CPTAC LUAD Discovery Study - Proteome,PDC000153,1,example-study-uuid,CPTAC3 Discovery and Confirmatory,Peptide Spectral Matches,Text,Open,5000000,00000000000000000000000000000000,Yes,REPLACE_WITH_URL_FROM_FRESH_PDC_EXPORT
+example-id-002,EXAMPLE_LUAD_f02.psm,EXAMPLE_RUN_ID,P-S046-1,CPTAC LUAD Discovery Study - Proteome,PDC000153,1,example-study-uuid,CPTAC3 Discovery and Confirmatory,Peptide Spectral Matches,Text,Open,5000000,11111111111111111111111111111111,Yes,REPLACE_WITH_URL_FROM_FRESH_PDC_EXPORT

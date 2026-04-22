@@ -40,9 +40,20 @@ get_study_id() {
   awk -F',' 'NR==1 { for(i=1;i<=NF;i++) if($i~/PDC Study ID/) col=i; next } col && $col!="" { gsub(/"/,"",$col); print $col; exit }' "$manifest"
 }
 
-for manifest in "$MANIFESTS_DIR"/PDC_file_manifest_*.csv; do
+shopt -s nullglob
+_manifest_list=( "$MANIFESTS_DIR"/PDC_file_manifest_*.csv "$MANIFESTS_DIR"/PDC*_pdc_file_manifest.csv )
+shopt -u nullglob
+if [[ "${#_manifest_list[@]}" -eq 0 ]]; then
+  echo "No manifest CSVs found in $MANIFESTS_DIR (expected PDC_file_manifest_*.csv or PDC*_pdc_file_manifest.csv)."
+  echo "Export Peptide Spectral Matches manifests from PDC — see $MANIFESTS_DIR/README.md"
+  exit 1
+fi
+for manifest in "${_manifest_list[@]}"; do
   [ -f "$manifest" ] || continue
   name="$(basename "$manifest")"
+  if [[ "$name" == "example_pdc_file_manifest.csv" ]]; then
+    continue
+  fi
   study_id="$(get_study_id "$manifest")"
   if [ -z "$study_id" ]; then
     echo "Skip $name: could not get PDC Study ID"

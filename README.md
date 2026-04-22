@@ -69,6 +69,7 @@ docs/                    # Design + handoff + audit
 |-----|----------|
 | **`docs/HOW_TO_RUN_EVERYTHING.md`** | **Central run guide:** clone → data → matrices → benchmark → custom paths |
 | **`data/PIPELINE_README.md`** | PDC manifest → download → MSstatsTMT → `gene_matrix.csv` (authoritative) |
+| **`data/manifests/README.md`** | Where to get PDC manifests (PSM / Text); what to save locally |
 | **`docs/LAB_ONBOARDING.md`** | `CPTAC_LOCAL_MIRROR`, clone layout, env vars |
 | **`scripts/preprocessing/README.md`** | Preprocessing narrative + path map |
 | **`scripts/benchmark/README.md`** | Overnight benchmark steps 0–12 |
@@ -86,7 +87,7 @@ docs/                    # Design + handoff + audit
 
 ## What not to commit
 
-Large downloads (`data/pdc_psm/`, `data/results/`, …), `.venv/`, and local mirrors are typically **gitignored** (see root `.gitignore`). Regenerated benchmark CSVs under `reports/benchmark_master/` are a **team policy** choice.
+Large downloads (`data/pdc_psm/`, `data/results/`, …), **dated PDC manifest CSVs** (expiring URLs), `.venv/`, and local mirrors are **gitignored** (see root `.gitignore`). The repo keeps **`data/manifests/README.md`** and **`example_pdc_file_manifest.csv`** only. Regenerated benchmark CSVs under `reports/benchmark_master/` are a **team policy** choice.
 
 ---
 

@@ -6,7 +6,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
 
 STUDY="PDC000153"
-MANIFEST="${PDC000153_MANIFEST:-$SCRIPT_DIR/manifests/PDC_file_manifest_04112026_120754.csv}"
+MANIFEST="${PDC000153_MANIFEST:-$SCRIPT_DIR/manifests/PDC000153_pdc_file_manifest.csv}"
 PSM_ROOT="$SCRIPT_DIR/pdc_psm"
 OUT_DIR="$SCRIPT_DIR/results/$STUDY"
 
@@ -38,6 +38,10 @@ fi
 
 if [[ ! -f "$MANIFEST" ]]; then
   echo "Manifest not found: $MANIFEST"
+  echo "Export a PSM (Text / .psm) file manifest from PDC and save as:"
+  echo "  $SCRIPT_DIR/manifests/PDC000153_pdc_file_manifest.csv"
+  echo "Or set PDC000153_MANIFEST=/path/to/your_export.csv"
+  echo "See: $SCRIPT_DIR/manifests/README.md"
   exit 1
 fi
 

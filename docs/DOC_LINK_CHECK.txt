@@ -76,6 +76,9 @@ OK scripts/run_native_baselines.py
 OK scripts/run_preprocessing.py
 OK scripts/verify_repro_setup.py
 
+OK data/manifests/README.md
+OK data/manifests/example_pdc_file_manifest.csv
+
 ## Config paths
 OK configs/preprocessing/default.yaml
 OK configs/tasks/breast_subtype.yaml

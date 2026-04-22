@@ -22,6 +22,8 @@ def main():
     study_to_manifests = defaultdict(list)
 
     for path in manifests:
+        if path.name == "example_pdc_file_manifest.csv":
+            continue
         studies = set()
         with open(path, newline="", encoding="utf-8", errors="replace") as f:
             reader = csv.DictReader(f)

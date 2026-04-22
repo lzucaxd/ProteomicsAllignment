@@ -12,7 +12,7 @@ This stage converts **raw TMT proteomics** (PSM- or peptide-level reporter-ion d
 | Main R driver (PSM → protein → gene, per study) | [`data/pdc_psm_to_msstatsTMT_protein_matrix.R`](../../data/pdc_psm_to_msstatsTMT_protein_matrix.R) |
 | Batch runner (download + R, space-efficient) | [`data/run_batch_studies.sh`](../../data/run_batch_studies.sh) |
 | Per-manifest orchestration | `data/run_pipeline_per_manifest.sh` (see PIPELINE_README) |
-| PDC manifest CSVs | `data/manifests/` |
+| PDC manifest CSVs (local exports; not in git) | `data/manifests/` — start at [`data/manifests/README.md`](../../data/manifests/README.md) |
 | Downloaded PSMs (large, gitignored) | `data/pdc_psm/{study_id}/` |
 | Outputs | `data/results/{study_id}/` (e.g. `msstats_input.tsv`, `ProteinLevelData.csv`, `gene_matrix.csv`) |
 

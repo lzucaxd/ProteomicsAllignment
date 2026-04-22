@@ -27,6 +27,16 @@ data/pdc/
 data/pdc_psm/
 data/ccle_peptide/
 data/results/
+
+# PDC file-manifest exports (signed URLs expire; obtain fresh CSVs — see data/manifests/README.md)
+data/manifests/PDC_file_manifest_*.csv
+data/manifests/PDC*_pdc_file_manifest.csv
+
+# Optional local processed copy (use configs/preprocessing/union.yaml paths instead)
+data/processed_union/
+
+# Ad-hoc local datasets
+data/MSI VS MSS/
 *.mzML
 *.mzXML
 *.raw

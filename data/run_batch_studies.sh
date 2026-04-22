@@ -118,28 +118,30 @@ print(n)
 # ---------------------------------------------------------------------------
 # Study list: STUDY_ID  MANIFEST  SAMPLE_TXT
 # ---------------------------------------------------------------------------
+# Per-study manifest CSVs: export from PDC (PSM / Text) and save as manifests/<STUDY>_pdc_file_manifest.csv
+# See data/manifests/README.md
 run_one_study PDC000153 \
-  "manifests/PDC_file_manifest_04112026_120754.csv" \
+  "manifests/PDC000153_pdc_file_manifest.csv" \
   "$MIRROR/PDC000153/CPTAC3_Lung_Adeno_Carcinoma_Proteome.sample.txt"
 
 run_one_study PDC000204 \
-  "manifests/PDC_file_manifest_04112026_120906.csv" \
+  "manifests/PDC000204_pdc_file_manifest.csv" \
   "$MIRROR/PDC000204/CPTAC3_Glioblastoma_Multiforme_Proteome.sample.txt"
 
 run_one_study PDC000221 \
-  "manifests/PDC_file_manifest_04112026_120953.csv" \
+  "manifests/PDC000221_pdc_file_manifest.csv" \
   "$MIRROR/PDC000221/CPTAC3_Head_and_Neck_Carcinoma_Proteome.sample.txt"
 
 run_one_study PDC000234 \
-  "manifests/PDC_file_manifest_04112026_121016.csv" \
+  "manifests/PDC000234_pdc_file_manifest.csv" \
   "$MIRROR/PDC000234/CPTAC3_Lung_Squamous_Cell_Carcinoma_Proteome.sample.txt"
 
 run_one_study PDC000270 \
-  "manifests/PDC_file_manifest_04112026_121046.csv" \
+  "manifests/PDC000270_pdc_file_manifest.csv" \
   "$MIRROR/PDC000270/CPTAC3_Pancreatic_Ductal_Adenocarcinoma_Proteome.sample.txt"
 
 run_one_study PDC000464 \
-  "manifests/PDC_file_manifest_04112026_121119.csv" \
+  "manifests/PDC000464_pdc_file_manifest.csv" \
   "$MIRROR/PDC000464/CPTAC3_non-ccRCC_JHU_Proteome.sample.txt"
 
 echo ""

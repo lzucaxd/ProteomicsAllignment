@@ -68,7 +68,7 @@ Reproducibility / commit policy for paper runs: **[CLEAN_CLONE_REPRODUCIBILITY.m
 
 | What | Where it comes from | Where it goes in this repo |
 |------|---------------------|----------------------------|
-| **PDC file manifest CSV** per study | [NCI PDC](https://pdc.cancer.gov/) → study → **Files** → filter to **PSM** / **`.psm`** → **Export** manifest | `data/manifests/` (e.g. `PDC_file_manifest_*.csv`) |
+| **PDC file manifest CSV** per study | [NCI PDC](https://pdc.cancer.gov/) → study → **Files** → filter to **PSM** / **`.psm`** → **Export** manifest | `data/manifests/` — **how to name and refresh:** [`data/manifests/README.md`](../data/manifests/README.md) |
 | **CPTAC MSstatsTMT design** (`.sample.txt`) | Study bundle or lab mirror | Paths in **`data/sample_files_msstats_tmt.csv`** (column `path`); resolve with **`CPTAC_LOCAL_MIRROR`** if relative |
 | **CCLE** inputs + processed matrix | Your lab pipeline | Benchmark expects **`data/results/CCLE_corrected/gene_matrix.csv`** (and inputs under `data/ccle_peptide/` as documented) |
 

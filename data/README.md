@@ -9,7 +9,7 @@ Large downloads and intermediates are **gitignored** (see root `.gitignore`).
 | Location | Source | Description |
 |----------|--------|-------------|
 | `data/pdc_psm/{study_id}/` | PDC | Downloaded CPTAC PSM tables per study |
-| `data/manifests/` | PDC | File manifest CSVs used to fetch PSMs |
+| `data/manifests/` | PDC | **Local only:** file manifest CSVs (not in git — URLs expire). See **`data/manifests/README.md`** + **`example_pdc_file_manifest.csv`**. |
 | `data/ccle_peptide/` | DepMap / Broad-style inputs | CCLE peptide-level reporter-ion tables and helpers |
 | `data/results/{study_id}/` | This pipeline | Per-study MSstatsTMT outputs (`gene_matrix.csv`, etc.) — **ignored** by default due to size |
 
